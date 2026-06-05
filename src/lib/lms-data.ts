@@ -204,7 +204,15 @@ export function lessonsFor(course: Course): { module: string; lessons: Lesson[] 
   }));
 }
 
-export const LEADERBOARD = [
+export const LEADERBOARD: Array<{
+  n: string;
+  name: string;
+  grade: number;
+  spec: string;
+  xp: number;
+  today: number;
+  you?: boolean;
+}> = [
   { n: "01", name: "Aanya Sharma", grade: 12, spec: "Science Stream · PCM", xp: 18420, today: 520 },
   { n: "02", name: "Vihaan Mehta", grade: 11, spec: "Science · PCB", xp: 17890, today: 410 },
   { n: "03", name: "You", grade: 10, spec: "Class 10 — Board Prep", xp: 16240, today: 380, you: true },
