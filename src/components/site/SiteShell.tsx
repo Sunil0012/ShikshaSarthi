@@ -1,13 +1,8 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Github,
-  Menu,
-  Sparkles,
-  Twitter,
-  X,
-} from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { ArrowRight, Github, LogOut, Menu, Sparkles, Twitter, User, X } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   return (
@@ -25,7 +20,11 @@ export function Logo({ withWord = true }: { withWord?: boolean }) {
       <div className="grid size-7 place-items-center rounded-md bg-ink">
         <div className="size-2.5 rounded-[2px] bg-brand" />
       </div>
-      {withWord && <span className="font-display text-xl font-semibold">Shiksha Saarthi</span>}
+      {withWord && (
+        <span className="font-display text-xl font-semibold tracking-tight">
+          Shiksha <span className="text-brand">Saarthi</span>
+        </span>
+      )}
     </Link>
   );
 }
@@ -41,6 +40,9 @@ const NAV_LINKS = [
 function Nav() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-black/[0.06] bg-canvas/75 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
@@ -64,19 +66,42 @@ function Nav() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            to="/login"
-            className="hidden h-8 items-center px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex"
-          >
-            Log in
-          </Link>
-          <Link
-            to="/signup"
-            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-ink px-4 text-sm font-medium text-white ring-1 ring-ink transition-transform hover:scale-[1.02]"
-          >
-            Start free
-            <ArrowRight className="size-3.5" />
-          </Link>
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="hidden h-8 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex"
+              >
+                <User className="size-3.5" />
+                {user.email?.split("@")[0]}
+              </Link>
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  navigate({ to: "/" });
+                }}
+                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-ink px-3 text-sm font-medium text-white"
+              >
+                <LogOut className="size-3.5" /> Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth"
+                className="hidden h-8 items-center px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/auth"
+                search={{ mode: "signup" }}
+                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-ink px-4 text-sm font-medium text-white ring-1 ring-ink transition-transform hover:scale-[1.02]"
+              >
+                Start free <ArrowRight className="size-3.5" />
+              </Link>
+            </>
+          )}
           <button
             onClick={() => setOpen((v) => !v)}
             className="ml-1 grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] md:hidden"
@@ -99,13 +124,15 @@ function Nav() {
                 {l.label}
               </Link>
             ))}
-            <Link
-              to="/login"
-              onClick={() => setOpen(false)}
-              className="block rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-            >
-              Log in
-            </Link>
+            {!user && (
+              <Link
+                to="/auth"
+                onClick={() => setOpen(false)}
+                className="block rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+              >
+                Log in
+              </Link>
+            )}
           </div>
         </div>
       )}
@@ -125,65 +152,44 @@ function Footer() {
               and adaptive practice that work even offline.
             </p>
             <div className="flex gap-2">
-              <a
-                href="#"
-                className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50"
-                aria-label="Twitter"
-              >
+              <a href="#" className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50" aria-label="Twitter">
                 <Twitter className="size-3.5 text-zinc-500" />
               </a>
-              <a
-                href="#"
-                className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50"
-                aria-label="GitHub"
-              >
+              <a href="#" className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50" aria-label="GitHub">
                 <Github className="size-3.5 text-zinc-500" />
               </a>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-12 md:grid-cols-4">
-            <FooterCol
-              h="Learn"
-              links={[
-                { to: "/courses?grade=6", label: "Class 6" },
-                { to: "/courses?grade=8", label: "Class 8" },
-                { to: "/courses?grade=10", label: "Class 10 (Board)" },
-                { to: "/courses?grade=12", label: "Class 12 (Board)" },
-              ]}
-            />
-            <FooterCol
-              h="Platform"
-              links={[
-                { to: "/games", label: "Educational Games" },
-                { to: "/leaderboard", label: "Leaderboard" },
-                { to: "/dashboard", label: "Dashboard" },
-                { to: "/pricing", label: "Pricing" },
-              ]}
-            />
-            <FooterCol
-              h="Company"
-              links={[
-                { to: "/about", label: "About" },
-                { to: "/about", label: "Careers" },
-                { to: "/about", label: "Press" },
-                { to: "/about", label: "Contact" },
-              ]}
-            />
-            <FooterCol
-              h="Legal"
-              links={[
-                { to: "/about", label: "Privacy" },
-                { to: "/about", label: "Terms" },
-                { to: "/about", label: "Security" },
-                { to: "/about", label: "DPA" },
-              ]}
-            />
+            <FooterCol h="Learn" links={[
+              { to: "/courses", label: "All courses" },
+              { to: "/courses", label: "Class 6 – 8" },
+              { to: "/courses", label: "Class 10 (Board)" },
+              { to: "/courses", label: "Class 12 (Board)" },
+            ]}/>
+            <FooterCol h="Platform" links={[
+              { to: "/games", label: "Educational Games" },
+              { to: "/leaderboard", label: "Leaderboard" },
+              { to: "/dashboard", label: "Dashboard" },
+              { to: "/pricing", label: "Pricing" },
+            ]}/>
+            <FooterCol h="Company" links={[
+              { to: "/about", label: "About" },
+              { to: "/about", label: "Careers" },
+              { to: "/about", label: "Press" },
+              { to: "/about", label: "Contact" },
+            ]}/>
+            <FooterCol h="Legal" links={[
+              { to: "/about", label: "Privacy" },
+              { to: "/about", label: "Terms" },
+              { to: "/about", label: "Security" },
+              { to: "/about", label: "DPA" },
+            ]}/>
           </div>
         </div>
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-black/[0.06] pt-8 md:flex-row">
           <span className="text-[11px] text-zinc-400">
-            © 2026 Shiksha Saarthi Learning. Made with <Sparkles className="inline size-3 text-brand" /> for
-            curious minds.
+            © 2026 Shiksha Saarthi Learning. Made with <Sparkles className="inline size-3 text-brand" /> for curious minds.
           </span>
           <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-400">
             <span className="size-1.5 rounded-full bg-brand" />
@@ -195,23 +201,14 @@ function Footer() {
   );
 }
 
-function FooterCol({
-  h,
-  links,
-}: {
-  h: string;
-  links: { to: string; label: string }[];
-}) {
+function FooterCol({ h, links }: { h: string; links: { to: string; label: string }[] }) {
   return (
     <div className="space-y-3">
       <h5 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{h}</h5>
       <ul className="space-y-2">
         {links.map((l, i) => (
           <li key={i}>
-            <Link
-              to={l.to}
-              className="text-sm text-zinc-600 transition-colors hover:text-ink"
-            >
+            <Link to={l.to} className="text-sm text-zinc-600 transition-colors hover:text-ink">
               {l.label}
             </Link>
           </li>
