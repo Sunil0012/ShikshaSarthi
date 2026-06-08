@@ -112,7 +112,7 @@ function CourseDetail() {
 
           <h2 className="font-display mt-12 text-2xl font-semibold">What you'll learn</h2>
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {course.topics.map((t) => (
+            {course.topics.map((t: string) => (
               <div key={t} className="flex items-start gap-2 rounded-lg border border-black/[0.05] bg-white px-4 py-3 text-sm">
                 <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-brand" /> {t}
               </div>
