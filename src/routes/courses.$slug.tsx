@@ -135,7 +135,7 @@ function CourseDetail() {
                 ["XP, badges & streaks", <Trophy className="size-3.5 text-brand" key="t"/>],
                 ["Available on phone & laptop", <Download className="size-3.5 text-brand" key="d"/>],
               ].map(([t, ic]) => (
-                <li key={t as string} className="flex items-center gap-2">{ic}{t}</li>
+                <li key={t as string} className="flex items-center gap-2">{ic as React.ReactNode}{t as React.ReactNode}</li>
               ))}
             </ul>
           </div>

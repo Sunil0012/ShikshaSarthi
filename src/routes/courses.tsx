@@ -50,15 +50,15 @@ function CoursesPage() {
           <Search className="size-4 text-zinc-400" />
           <input
             value={q}
-            onChange={(e) => { setQ(e.target.value); nav({ search: (s) => ({ ...s, q: e.target.value || undefined }) }); }}
+            onChange={(e) => { setQ(e.target.value); nav({ search: (s: any) => ({ ...s, q: e.target.value || undefined }) }); }}
             placeholder="Search courses (e.g. quadratic, photosynthesis)"
             className="w-full bg-transparent text-sm outline-none placeholder:text-zinc-400"
           />
         </div>
         <Select label="Grade" value={sp.grade?.toString() ?? ""} options={[["", "All"], ...GRADES.map((g) => [g.toString(), `Class ${g}`])]}
-          onChange={(v) => nav({ search: (s) => ({ ...s, grade: v ? Number(v) : undefined }) })} />
+          onChange={(v) => nav({ search: (s: any) => ({ ...s, grade: v ? Number(v) : undefined }) })} />
         <Select label="Subject" value={sp.subject ?? ""} options={[["", "All"], ...SUBJECTS.map((s) => [s.slug, s.name])]}
-          onChange={(v) => nav({ search: (s) => ({ ...s, subject: v || undefined }) })} />
+          onChange={(v) => nav({ search: (s: any) => ({ ...s, subject: v || undefined }) })} />
       </div>
 
       <div className="mt-3 text-xs text-zinc-500">{filtered.length} courses</div>
