@@ -25,7 +25,7 @@ export function Logo({ withWord = true }: { withWord?: boolean }) {
       <div className="grid size-7 place-items-center rounded-md bg-ink">
         <div className="size-2.5 rounded-[2px] bg-brand" />
       </div>
-      {withWord && <span className="font-display text-xl font-semibold">Lumio</span>}
+      {withWord && <span className="font-display text-xl font-semibold">Shiksha Saarthi</span>}
     </Link>
   );
 }
@@ -182,7 +182,7 @@ function Footer() {
         </div>
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-black/[0.06] pt-8 md:flex-row">
           <span className="text-[11px] text-zinc-400">
-            © 2026 Lumio Learning. Made with <Sparkles className="inline size-3 text-brand" /> for
+            © 2026 Shiksha Saarthi Learning. Made with <Sparkles className="inline size-3 text-brand" /> for
             curious minds.
           </span>
           <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-400">

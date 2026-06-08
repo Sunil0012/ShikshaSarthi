@@ -225,7 +225,7 @@ export const LEADERBOARD: Array<{
   { n: "10", name: "Anika Kapoor", grade: 12, spec: "Science · PCB", xp: 12540, today: 360 },
   { n: "11", name: "Ayaan Verma", grade: 6, spec: "Class 6 — Foundations", xp: 11900, today: 220 },
   { n: "12", name: "Ira Nair", grade: 9, spec: "Class 9 — Olympiad", xp: 11420, today: 175 },
-] as const;
+];
 
 export const GAMES = [
   { slug: "number-ninja", title: "Number Ninja", subject: "Mathematics", desc: "Slice equations before the timer ends. Trains mental math speed.", players: "12.4k", grade: "6-8", tone: "brand" as const, icon: "Sword" },

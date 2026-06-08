@@ -33,13 +33,13 @@ import { SUBJECTS, GRADES, COURSES, LEADERBOARD } from "@/lib/lms-data";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lumio — Brilliant learning for class 6 to 12" },
+      { title: "Shiksha Saarthi — Brilliant learning for class 6 to 12" },
       {
         name: "description",
         content:
           "A gamified, offline-first learning platform for students of class 6 to 12. Adaptive practice, real teachers, educational games, XP, streaks, and board-exam preparation.",
       },
-      { property: "og:title", content: "Lumio — Learn brilliantly. Class 6 to 12." },
+      { property: "og:title", content: "Shiksha Saarthi — Learn brilliantly. Class 6 to 12." },
       {
         property: "og:description",
         content:
@@ -581,7 +581,7 @@ function Bento() {
                 <RetentionChart />
                 <div className="mt-4 flex items-center gap-4 text-[10px] text-zinc-400">
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="block size-2 rounded-full bg-brand" /> Lumio
+                    <span className="block size-2 rounded-full bg-brand" /> Shiksha Saarthi
                   </span>
                   <span className="inline-flex items-center gap-1.5">
                     <span className="block size-2 rounded-full bg-zinc-300" /> Class average
@@ -864,7 +864,7 @@ function OfflineSection() {
                     <Cloud className="size-4 text-white/70" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium">Lumio cloud</div>
+                    <div className="text-sm font-medium">Shiksha Saarthi cloud</div>
                     <div className="text-[11px] text-white/50">42 ops queued · auto-merge</div>
                   </div>
                 </div>
@@ -1042,7 +1042,7 @@ function Testimonials() {
       city: "Bengaluru",
     },
     {
-      q: "Cracked NEET prep alongside my class 12 boards. Lumio's chemistry track was a lifesaver.",
+      q: "Cracked NEET prep alongside my class 12 boards. Shiksha Saarthi's chemistry track was a lifesaver.",
       name: "Vihaan, Class 12",
       city: "Delhi",
     },
@@ -1058,7 +1058,7 @@ function Testimonials() {
         <SectionHeader
           eyebrow="Loved by students"
           title="Real students. Real scores."
-          sub="Lumio is used by over 1.2 lakh students across India — from class 6 fundamentals to class 12 board crunch."
+          sub="Shiksha Saarthi is used by over 1.2 lakh students across India — from class 6 fundamentals to class 12 board crunch."
         />
         <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {items.map((t, i) => (
