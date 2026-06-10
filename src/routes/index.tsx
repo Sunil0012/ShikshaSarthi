@@ -57,12 +57,77 @@ function Landing() {
       <GradePicker />
       <Bento />
       <SubjectStrip />
+      <LearningModesSection />
+      <BuiltForEveryone />
       <PopularCourses />
       <OfflineSection />
       <LeaderboardPreview />
       <Testimonials />
       <FinalCTA />
     </>
+  );
+}
+
+function LearningModesSection() {
+  const modes = [
+    { t: "Mental Ability Tests", d: "Adaptive reasoning, series, syllogisms with animated explanations.", to: "/mat" },
+    { t: "Audio Quizzes", d: "Listen-and-answer drills for languages and chemistry. Offline ready.", to: "/courses" },
+    { t: "Video Quizzes", d: "Watch a 90s clip, answer in 10. Pause-and-think learning.", to: "/courses" },
+    { t: "Virtual Experiments", d: "Run Ohm's Law, electrolysis, pendulum and more from any laptop.", to: "/experiments" },
+    { t: "Puzzles & Memory", d: "Memory Match, Match-the-Pieces and logic grids for play-based revision.", to: "/puzzles" },
+    { t: "Vocabulary Builder", d: "Daily 5-word streaks, idioms, and academic word lists.", to: "/vocabulary" },
+  ];
+  return (
+    <section className="px-6 py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex items-end justify-between">
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand">Learning modes</div>
+            <h2 className="font-display mt-2 text-4xl font-semibold tracking-tight md:text-5xl">Six ways to actually understand a topic.</h2>
+          </div>
+        </div>
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {modes.map((m) => (
+            <Link key={m.t} to={m.to as any} className="group rounded-2xl border border-black/[0.06] bg-white p-6 transition hover:-translate-y-0.5 hover:shadow-md">
+              <h3 className="font-display text-lg font-semibold">{m.t}</h3>
+              <p className="mt-1 text-sm text-zinc-500">{m.d}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-brand opacity-70 transition group-hover:opacity-100">
+                Explore <ArrowRight className="size-3" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BuiltForEveryone() {
+  const cards = [
+    { t: "For Students", to: "/for-students", d: "Courses, games, virtual labs, MAT, audio + video quizzes. Online or offline.", tag: "Class 6 – 12" },
+    { t: "For Teachers", to: "/for-teachers", d: "Build quizzes, assign drills, send feedback, watch every student grow in real time.", tag: "AI-assisted tools" },
+    { t: "For Schools", to: "/for-schools", d: "Multi-classroom admin, feedback forms, analytics, offline campus deployment.", tag: "Enterprise grade" },
+  ];
+  return (
+    <section className="px-6 py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand">Built for everyone in school</div>
+        <h2 className="font-display mt-2 max-w-3xl text-4xl font-semibold tracking-tight md:text-5xl">One platform. Three powerful experiences.</h2>
+        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+          {cards.map((c) => (
+            <Link key={c.t} to={c.to as any} className="group relative overflow-hidden rounded-3xl bg-ink p-8 text-white transition hover:-translate-y-0.5">
+              <div className="absolute -right-16 -top-16 size-56 rounded-full bg-brand/20 blur-3xl" />
+              <div className="relative">
+                <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-zinc-200">{c.tag}</span>
+                <h3 className="font-display mt-5 text-2xl font-semibold">{c.t}</h3>
+                <p className="mt-2 text-sm text-zinc-300">{c.d}</p>
+                <div className="mt-6 inline-flex items-center gap-1 text-xs font-medium text-brand">Learn more <ArrowRight className="size-3" /></div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
