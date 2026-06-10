@@ -39,12 +39,15 @@ function GamesPage() {
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {GAMES.map((g) => {
           const Icon = ICONS[g.icon] ?? Gamepad2;
+          const playable = (g as any).playable;
+          const to = playable ? (`/games/${g.slug}` as const) : ("/auth" as const);
           return (
             <div key={g.slug} className="group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-6 transition-all hover:-translate-y-0.5 hover:shadow-lg">
               <div className="absolute -right-10 -top-10 size-40 rounded-full bg-brand/10 blur-2xl transition-opacity group-hover:opacity-100" />
               <div className="relative">
-                <div className="grid size-12 place-items-center rounded-xl bg-ink text-white">
-                  <Icon className="size-5" />
+                <div className="flex items-center justify-between">
+                  <div className="grid size-12 place-items-center rounded-xl bg-ink text-white"><Icon className="size-5" /></div>
+                  {playable && <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">Playable now</span>}
                 </div>
                 <h3 className="font-display mt-5 text-xl font-semibold">{g.title}</h3>
                 <p className="mt-1 text-xs text-brand font-medium uppercase tracking-wider">{g.subject}</p>
@@ -53,9 +56,9 @@ function GamesPage() {
                   <span className="inline-flex items-center gap-1"><Users className="size-3" /> {g.players} playing</span>
                   <span className="rounded-full bg-zinc-100 px-2 py-0.5 font-medium">Class {g.grade}</span>
                 </div>
-                <button className="mt-5 w-full rounded-full bg-ink px-4 py-2 text-sm font-medium text-white opacity-90 transition group-hover:opacity-100">
-                  Play now
-                </button>
+                <Link to={to} {...(!playable ? { search: { mode: "signup" } } : {})} className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-ink px-4 py-2 text-sm font-medium text-white opacity-90 transition group-hover:opacity-100">
+                  {playable ? "Play now" : "Sign in to play"}
+                </Link>
               </div>
             </div>
           );
