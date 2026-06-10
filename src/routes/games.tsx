@@ -56,7 +56,7 @@ function GamesPage() {
                   <span className="inline-flex items-center gap-1"><Users className="size-3" /> {g.players} playing</span>
                   <span className="rounded-full bg-zinc-100 px-2 py-0.5 font-medium">Class {g.grade}</span>
                 </div>
-                <Link to={to} {...(!playable ? { search: { mode: "signup" } } : {})} className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-ink px-4 py-2 text-sm font-medium text-white opacity-90 transition group-hover:opacity-100">
+                <Link to={to as any} {...(!playable ? { search: { mode: "signup" } } : {})} className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-ink px-4 py-2 text-sm font-medium text-white opacity-90 transition group-hover:opacity-100">
                   {playable ? "Play now" : "Sign in to play"}
                 </Link>
               </div>
