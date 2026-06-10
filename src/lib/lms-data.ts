@@ -1,7 +1,7 @@
 export type Subject = {
   slug: string;
   name: string;
-  icon: string; // lucide name
+  icon: string;
   tone: "brand" | "ember" | "azure" | "violet" | "rose" | "amber";
 };
 
@@ -49,23 +49,11 @@ const tones = [
 ] as const;
 
 function mkCourse(
-  slug: string,
-  title: string,
-  subject: string,
-  grade: Grade,
-  level: Course["level"],
-  description: string,
-  topics: string[],
-  i: number,
+  slug: string, title: string, subject: string, grade: Grade,
+  level: Course["level"], description: string, topics: string[], i: number,
 ): Course {
   return {
-    slug,
-    title,
-    subject,
-    grade,
-    level,
-    description,
-    topics,
+    slug, title, subject, grade, level, description, topics,
     modules: 8 + ((i * 3) % 12),
     hours: 18 + ((i * 5) % 40),
     lessons: 40 + ((i * 7) % 60),
@@ -76,114 +64,40 @@ function mkCourse(
 }
 
 export const COURSES: Course[] = [
-  // Class 6
-  mkCourse("math-6", "Mathematics — Class 6", "mathematics", 6, "Foundation",
-    "Build a rock-solid number sense with playful drills, geometry puzzles, and real-world problem solving aligned to the NCERT syllabus.",
-    ["Knowing Our Numbers", "Whole Numbers", "Integers", "Fractions & Decimals", "Geometry Basics", "Mensuration", "Ratio & Proportion", "Symmetry"], 0),
-  mkCourse("science-6", "Science — Class 6", "science", 6, "Foundation",
-    "Hands-on science with virtual labs covering food, materials, motion, light, and the natural world around us.",
-    ["Food & Components", "Sorting Materials", "Body Movements", "Living Organisms", "Motion & Measurement", "Light & Shadows", "Electricity", "Water Cycle"], 1),
-  mkCourse("english-6", "English — Class 6", "english", 6, "Foundation",
-    "Honeysuckle and A Pact with the Sun, brought alive through audio, grammar drills, and creative writing prompts.",
-    ["Comprehension", "Grammar Foundations", "Vocabulary", "Creative Writing", "Poetry", "Letter Writing"], 2),
-  mkCourse("sst-6", "Social Studies — Class 6", "social-studies", 6, "Foundation",
-    "History, Geography & Civics in one journey — from the earliest people to how our planet and democracy work.",
-    ["Earliest People", "First Cities", "Maps & Earth", "Our Government", "Rural Livelihoods"], 3),
-
-  // Class 7
-  mkCourse("math-7", "Mathematics — Class 7", "mathematics", 7, "Core",
-    "Algebra steps in. Master integers, rational numbers, equations, and triangles with adaptive practice that grows with you.",
-    ["Integers", "Fractions & Decimals", "Data Handling", "Simple Equations", "Lines & Angles", "Triangles", "Algebraic Expressions", "Exponents"], 4),
-  mkCourse("science-7", "Science — Class 7", "science", 7, "Core",
-    "Explore acids and bases, heat, wind, soil and reproduction with experiments you can run at home.",
-    ["Nutrition in Plants", "Heat", "Acids & Bases", "Weather & Climate", "Soil", "Respiration", "Reproduction in Plants"], 5),
-  mkCourse("english-7", "English — Class 7", "english", 7, "Core",
-    "Honeycomb and An Alien Hand with deep reading, grammar mastery, and writing studios.",
-    ["Reading Strategies", "Tenses Mastery", "Articles & Prepositions", "Composition", "Speech & Debate"], 6),
-
-  // Class 8
-  mkCourse("math-8", "Mathematics — Class 8", "mathematics", 8, "Core",
-    "Rational numbers, linear equations, quadrilaterals, and the start of mensuration — the bridge to high school maths.",
-    ["Rational Numbers", "Linear Equations", "Quadrilaterals", "Squares & Roots", "Cubes", "Comparing Quantities", "Algebraic Identities", "Mensuration"], 7),
-  mkCourse("science-8", "Science — Class 8", "science", 8, "Core",
-    "Cells, microorganisms, force, friction, sound, and chemical effects — the foundations of physics, chem, and bio.",
-    ["Crop Production", "Microorganisms", "Synthetic Fibres", "Materials: Metals", "Cell Structure", "Force & Pressure", "Friction", "Sound", "Chemical Effects"], 8),
-  mkCourse("cs-8", "Computer Science — Class 8", "computer-science", 8, "Core",
-    "Code your first apps in Scratch and Python. Learn loops, conditions, and build 5 mini-projects.",
-    ["Python Basics", "Variables", "Loops", "Conditions", "Functions", "Mini Project: Quiz App"], 9),
-
-  // Class 9
-  mkCourse("math-9", "Mathematics — Class 9", "mathematics", 9, "Advanced",
-    "Number systems, polynomials, coordinate geometry, and Euclid — high-school maths begins here with rigor and intuition.",
-    ["Number Systems", "Polynomials", "Coordinate Geometry", "Linear Equations in Two Variables", "Triangles", "Circles", "Heron's Formula", "Surface Areas", "Statistics", "Probability"], 10),
-  mkCourse("science-9", "Science — Class 9", "science", 9, "Advanced",
-    "Matter, atoms, motion, gravitation, and life processes — three subjects in one cohesive course.",
-    ["Matter in Surroundings", "Atoms & Molecules", "Structure of Atom", "Cell Unit of Life", "Tissues", "Motion", "Force & Laws", "Gravitation", "Work & Energy", "Sound"], 11),
-  mkCourse("english-9", "English — Class 9", "english", 9, "Advanced",
-    "Beehive and Moments — literature analysis, advanced grammar, and exam-ready writing skills.",
-    ["Literary Analysis", "Advanced Grammar", "Essay Writing", "Diary Entry", "Speech Writing"], 12),
-  mkCourse("sst-9", "Social Studies — Class 9", "social-studies", 9, "Advanced",
-    "France, Russia, Nazism, climate, democracy, and rural livelihoods — history shaped by ideas.",
-    ["French Revolution", "Socialism in Europe", "Nazism", "India: Physical Features", "Drainage", "Climate", "Democracy", "Constitutional Design"], 13),
-
-  // Class 10
-  mkCourse("math-10", "Mathematics — Class 10", "mathematics", 10, "Board Prep",
-    "Board-exam-ready maths with PYQs, full-length mocks, and chapter-wise analysis to maximize your score.",
-    ["Real Numbers", "Polynomials", "Linear Equations", "Quadratic Equations", "Arithmetic Progressions", "Triangles", "Circles", "Trigonometry", "Statistics", "Probability", "PYQ Practice", "Mock Tests"], 14),
-  mkCourse("science-10", "Science — Class 10", "science", 10, "Board Prep",
-    "Complete board prep: chemical reactions, electricity, life processes — with 200+ solved PYQs.",
-    ["Chemical Reactions", "Acids Bases Salts", "Metals & Non-metals", "Carbon Compounds", "Life Processes", "Control & Coordination", "Electricity", "Magnetic Effects", "Light Reflection", "Human Eye"], 15),
-  mkCourse("english-10", "English — Class 10", "english", 10, "Board Prep",
-    "First Flight and Footprints Without Feet — full board syllabus with marking-scheme aligned answer writing.",
-    ["Literature Mastery", "Grammar Tests", "Letter Writing", "Analytical Paragraphs", "Mock Board Papers"], 16),
-  mkCourse("sst-10", "Social Studies — Class 10", "social-studies", 10, "Board Prep",
-    "Nationalism, globalization, resources, democracy — every chapter mapped to the latest CBSE blueprint.",
-    ["Nationalism in India", "Indo-China & Vietnam", "Resources", "Forest & Wildlife", "Power Sharing", "Federalism", "Money & Credit", "Globalization"], 17),
-
-  // Class 11
-  mkCourse("physics-11", "Physics — Class 11", "physics", 11, "Advanced",
-    "Mechanics, thermodynamics, oscillations, and waves — engineered to build true conceptual depth for JEE & NEET.",
-    ["Units & Measurement", "Kinematics", "Laws of Motion", "Work Energy Power", "Rotational Motion", "Gravitation", "Mechanical Properties", "Thermodynamics", "Kinetic Theory", "Oscillations", "Waves"], 18),
-  mkCourse("chemistry-11", "Chemistry — Class 11", "chemistry", 11, "Advanced",
-    "Atomic structure, periodic table, organic basics, and equilibrium — the chemistry that unlocks everything.",
-    ["Basic Concepts", "Atomic Structure", "Periodicity", "Chemical Bonding", "Thermodynamics", "Equilibrium", "Redox", "Organic Basics", "Hydrocarbons"], 19),
-  mkCourse("math-11", "Mathematics — Class 11", "mathematics", 11, "Advanced",
-    "Sets, trigonometry, sequences, conic sections, and an early taste of calculus — JEE foundation laid right.",
-    ["Sets & Relations", "Trigonometric Functions", "Complex Numbers", "Linear Inequalities", "Permutations & Combinations", "Sequences", "Straight Lines", "Conic Sections", "Limits & Derivatives", "Statistics"], 20),
-  mkCourse("bio-11", "Biology — Class 11", "biology", 11, "Advanced",
-    "Diversity, plant & animal structure, cell biology, and human physiology for NEET aspirants.",
-    ["Living World", "Plant Kingdom", "Animal Kingdom", "Cell Structure", "Biomolecules", "Photosynthesis", "Respiration", "Human Physiology"], 21),
-  mkCourse("accounts-11", "Accountancy — Class 11", "accountancy", 11, "Advanced",
-    "Journal, ledger, trial balance, depreciation, and final accounts — the language of business explained.",
-    ["Accounting Basics", "Theory Base", "Recording Transactions", "Trial Balance", "Depreciation", "Bills of Exchange", "Financial Statements"], 22),
-
-  // Class 12
-  mkCourse("physics-12", "Physics — Class 12", "physics", 12, "Board Prep",
-    "Electrostatics to dual nature of matter — complete board + JEE/NEET prep with 500+ derivations and PYQs.",
-    ["Electric Charges", "Electric Potential", "Current Electricity", "Magnetism", "EM Induction", "AC", "EM Waves", "Ray Optics", "Wave Optics", "Dual Nature", "Atoms & Nuclei", "Semiconductors"], 23),
-  mkCourse("chemistry-12", "Chemistry — Class 12", "chemistry", 12, "Board Prep",
-    "Solid state, solutions, electrochemistry, coordination compounds, and biomolecules — boards & entrance ready.",
-    ["Solutions", "Electrochemistry", "Chemical Kinetics", "d & f Block", "Coordination Compounds", "Haloalkanes", "Alcohols", "Aldehydes & Ketones", "Amines", "Biomolecules"], 24),
-  mkCourse("math-12", "Mathematics — Class 12", "mathematics", 12, "Board Prep",
-    "Calculus, vectors, 3D geometry, probability — built for board toppers and JEE Mains aspirants.",
-    ["Relations & Functions", "Inverse Trigonometry", "Matrices", "Determinants", "Continuity & Differentiability", "Application of Derivatives", "Integrals", "Differential Equations", "Vectors", "3D Geometry", "Probability"], 25),
-  mkCourse("bio-12", "Biology — Class 12", "biology", 12, "Board Prep",
-    "Reproduction, genetics, evolution, biotechnology, and ecology — every NEET-relevant topic mapped to NCERT.",
-    ["Reproduction in Organisms", "Sexual Reproduction in Plants", "Human Reproduction", "Genetics & Evolution", "Biology & Human Welfare", "Biotechnology", "Ecology"], 26),
-  mkCourse("eco-12", "Economics — Class 12", "economics", 12, "Board Prep",
-    "Macroeconomics + Indian Economic Development, with case studies and 10-year PYQ archive.",
-    ["National Income", "Money & Banking", "Government Budget", "Foreign Exchange", "Development Experience", "Indian Economy 1950-90", "Liberalisation"], 27),
-  mkCourse("cs-12", "Computer Science — Class 12", "computer-science", 12, "Board Prep",
-    "Python deep-dive, data structures, SQL, and computer networks — board syllabus with real coding projects.",
-    ["Python Revision", "Functions", "File Handling", "Data Structures", "Stack", "Queue", "MySQL", "Networking", "Project Work"], 28),
+  mkCourse("math-6","Mathematics — Class 6","mathematics",6,"Foundation","Build a rock-solid number sense with playful drills, geometry puzzles, and real-world problem solving aligned to the NCERT syllabus.",["Knowing Our Numbers","Whole Numbers","Integers","Fractions & Decimals","Geometry Basics","Mensuration","Ratio & Proportion","Symmetry"],0),
+  mkCourse("science-6","Science — Class 6","science",6,"Foundation","Hands-on science with virtual labs covering food, materials, motion, light, and the natural world around us.",["Food & Components","Sorting Materials","Body Movements","Living Organisms","Motion & Measurement","Light & Shadows","Electricity","Water Cycle"],1),
+  mkCourse("english-6","English — Class 6","english",6,"Foundation","Honeysuckle and A Pact with the Sun, brought alive through audio, grammar drills, and creative writing prompts.",["Comprehension","Grammar Foundations","Vocabulary","Creative Writing","Poetry","Letter Writing"],2),
+  mkCourse("sst-6","Social Studies — Class 6","social-studies",6,"Foundation","History, Geography & Civics in one journey — from the earliest people to how our planet and democracy work.",["Earliest People","First Cities","Maps & Earth","Our Government","Rural Livelihoods"],3),
+  mkCourse("math-7","Mathematics — Class 7","mathematics",7,"Core","Algebra steps in. Master integers, rational numbers, equations, and triangles with adaptive practice that grows with you.",["Integers","Fractions & Decimals","Data Handling","Simple Equations","Lines & Angles","Triangles","Algebraic Expressions","Exponents"],4),
+  mkCourse("science-7","Science — Class 7","science",7,"Core","Explore acids and bases, heat, wind, soil and reproduction with experiments you can run at home.",["Nutrition in Plants","Heat","Acids & Bases","Weather & Climate","Soil","Respiration","Reproduction in Plants"],5),
+  mkCourse("english-7","English — Class 7","english",7,"Core","Honeycomb and An Alien Hand with deep reading, grammar mastery, and writing studios.",["Reading Strategies","Tenses Mastery","Articles & Prepositions","Composition","Speech & Debate"],6),
+  mkCourse("math-8","Mathematics — Class 8","mathematics",8,"Core","Rational numbers, linear equations, quadrilaterals, and the start of mensuration — the bridge to high school maths.",["Rational Numbers","Linear Equations","Quadrilaterals","Squares & Roots","Cubes","Comparing Quantities","Algebraic Identities","Mensuration"],7),
+  mkCourse("science-8","Science — Class 8","science",8,"Core","Cells, microorganisms, force, friction, sound, and chemical effects — the foundations of physics, chem, and bio.",["Crop Production","Microorganisms","Synthetic Fibres","Materials: Metals","Cell Structure","Force & Pressure","Friction","Sound","Chemical Effects"],8),
+  mkCourse("cs-8","Computer Science — Class 8","computer-science",8,"Core","Code your first apps in Scratch and Python. Learn loops, conditions, and build 5 mini-projects.",["Python Basics","Variables","Loops","Conditions","Functions","Mini Project: Quiz App"],9),
+  mkCourse("math-9","Mathematics — Class 9","mathematics",9,"Advanced","Number systems, polynomials, coordinate geometry, and Euclid — high-school maths begins here with rigor and intuition.",["Number Systems","Polynomials","Coordinate Geometry","Linear Equations in Two Variables","Triangles","Circles","Heron's Formula","Surface Areas","Statistics","Probability"],10),
+  mkCourse("science-9","Science — Class 9","science",9,"Advanced","Matter, atoms, motion, gravitation, and life processes — three subjects in one cohesive course.",["Matter in Surroundings","Atoms & Molecules","Structure of Atom","Cell Unit of Life","Tissues","Motion","Force & Laws","Gravitation","Work & Energy","Sound"],11),
+  mkCourse("english-9","English — Class 9","english",9,"Advanced","Beehive and Moments — literature analysis, advanced grammar, and exam-ready writing skills.",["Literary Analysis","Advanced Grammar","Essay Writing","Diary Entry","Speech Writing"],12),
+  mkCourse("sst-9","Social Studies — Class 9","social-studies",9,"Advanced","France, Russia, Nazism, climate, democracy, and rural livelihoods — history shaped by ideas.",["French Revolution","Socialism in Europe","Nazism","India: Physical Features","Drainage","Climate","Democracy","Constitutional Design"],13),
+  mkCourse("math-10","Mathematics — Class 10","mathematics",10,"Board Prep","Board-exam-ready maths with PYQs, full-length mocks, and chapter-wise analysis to maximize your score.",["Real Numbers","Polynomials","Linear Equations","Quadratic Equations","Arithmetic Progressions","Triangles","Circles","Trigonometry","Statistics","Probability","PYQ Practice","Mock Tests"],14),
+  mkCourse("science-10","Science — Class 10","science",10,"Board Prep","Complete board prep: chemical reactions, electricity, life processes — with 200+ solved PYQs.",["Chemical Reactions","Acids Bases Salts","Metals & Non-metals","Carbon Compounds","Life Processes","Control & Coordination","Electricity","Magnetic Effects","Light Reflection","Human Eye"],15),
+  mkCourse("english-10","English — Class 10","english",10,"Board Prep","First Flight and Footprints Without Feet — full board syllabus with marking-scheme aligned answer writing.",["Literature Mastery","Grammar Tests","Letter Writing","Analytical Paragraphs","Mock Board Papers"],16),
+  mkCourse("sst-10","Social Studies — Class 10","social-studies",10,"Board Prep","Nationalism, globalization, resources, democracy — every chapter mapped to the latest CBSE blueprint.",["Nationalism in India","Indo-China & Vietnam","Resources","Forest & Wildlife","Power Sharing","Federalism","Money & Credit","Globalization"],17),
+  mkCourse("physics-11","Physics — Class 11","physics",11,"Advanced","Mechanics, thermodynamics, oscillations, and waves — engineered to build true conceptual depth for JEE & NEET.",["Units & Measurement","Kinematics","Laws of Motion","Work Energy Power","Rotational Motion","Gravitation","Mechanical Properties","Thermodynamics","Kinetic Theory","Oscillations","Waves"],18),
+  mkCourse("chemistry-11","Chemistry — Class 11","chemistry",11,"Advanced","Atomic structure, periodic table, organic basics, and equilibrium — the chemistry that unlocks everything.",["Basic Concepts","Atomic Structure","Periodicity","Chemical Bonding","Thermodynamics","Equilibrium","Redox","Organic Basics","Hydrocarbons"],19),
+  mkCourse("math-11","Mathematics — Class 11","mathematics",11,"Advanced","Sets, trigonometry, sequences, conic sections, and an early taste of calculus — JEE foundation laid right.",["Sets & Relations","Trigonometric Functions","Complex Numbers","Linear Inequalities","Permutations & Combinations","Sequences","Straight Lines","Conic Sections","Limits & Derivatives","Statistics"],20),
+  mkCourse("bio-11","Biology — Class 11","biology",11,"Advanced","Diversity, plant & animal structure, cell biology, and human physiology for NEET aspirants.",["Living World","Plant Kingdom","Animal Kingdom","Cell Structure","Biomolecules","Photosynthesis","Respiration","Human Physiology"],21),
+  mkCourse("accounts-11","Accountancy — Class 11","accountancy",11,"Advanced","Journal, ledger, trial balance, depreciation, and final accounts — the language of business explained.",["Accounting Basics","Theory Base","Recording Transactions","Trial Balance","Depreciation","Bills of Exchange","Financial Statements"],22),
+  mkCourse("physics-12","Physics — Class 12","physics",12,"Board Prep","Electrostatics to dual nature of matter — complete board + JEE/NEET prep with 500+ derivations and PYQs.",["Electric Charges","Electric Potential","Current Electricity","Magnetism","EM Induction","AC","EM Waves","Ray Optics","Wave Optics","Dual Nature","Atoms & Nuclei","Semiconductors"],23),
+  mkCourse("chemistry-12","Chemistry — Class 12","chemistry",12,"Board Prep","Solid state, solutions, electrochemistry, coordination compounds, and biomolecules — boards & entrance ready.",["Solutions","Electrochemistry","Chemical Kinetics","d & f Block","Coordination Compounds","Haloalkanes","Alcohols","Aldehydes & Ketones","Amines","Biomolecules"],24),
+  mkCourse("math-12","Mathematics — Class 12","mathematics",12,"Board Prep","Calculus, vectors, 3D geometry, probability — built for board toppers and JEE Mains aspirants.",["Relations & Functions","Inverse Trigonometry","Matrices","Determinants","Continuity & Differentiability","Application of Derivatives","Integrals","Differential Equations","Vectors","3D Geometry","Probability"],25),
+  mkCourse("bio-12","Biology — Class 12","biology",12,"Board Prep","Reproduction, genetics, evolution, biotechnology, and ecology — every NEET-relevant topic mapped to NCERT.",["Reproduction in Organisms","Sexual Reproduction in Plants","Human Reproduction","Genetics & Evolution","Biology & Human Welfare","Biotechnology","Ecology"],26),
+  mkCourse("eco-12","Economics — Class 12","economics",12,"Board Prep","Macroeconomics + Indian Economic Development, with case studies and 10-year PYQ archive.",["National Income","Money & Banking","Government Budget","Foreign Exchange","Development Experience","Indian Economy 1950-90","Liberalisation"],27),
+  mkCourse("cs-12","Computer Science — Class 12","computer-science",12,"Board Prep","Python deep-dive, data structures, SQL, and computer networks — board syllabus with real coding projects.",["Python Revision","Functions","File Handling","Data Structures","Stack","Queue","MySQL","Networking","Project Work"],28),
 ];
 
 export type Lesson = {
-  number: string;
-  title: string;
-  duration: string;
-  type: "Video" | "Reading" | "Drill" | "Lab" | "Quiz";
-  done?: boolean;
+  number: string; title: string; duration: string;
+  type: "Video" | "Reading" | "Drill" | "Lab" | "Quiz"; done?: boolean;
 };
 
 export function lessonsFor(course: Course): { module: string; lessons: Lesson[] }[] {
@@ -191,12 +105,7 @@ export function lessonsFor(course: Course): { module: string; lessons: Lesson[] 
     module: `Module ${mi + 1}: ${t}`,
     lessons: Array.from({ length: 4 }).map((_, li) => ({
       number: `${mi + 1}.${li + 1}`,
-      title: [
-        `${t} — Core concept`,
-        `Worked examples on ${t.toLowerCase()}`,
-        `Practice drill: ${t.toLowerCase()}`,
-        `${t} — Quick quiz`,
-      ][li],
+      title: [`${t} — Core concept`, `Worked examples on ${t.toLowerCase()}`, `Practice drill: ${t.toLowerCase()}`, `${t} — Quick quiz`][li],
       duration: ["12 min", "18 min", "10 min", "6 min"][li],
       type: (["Video", "Reading", "Drill", "Quiz"] as const)[li],
       done: mi === 0 && li < 2,
@@ -204,15 +113,7 @@ export function lessonsFor(course: Course): { module: string; lessons: Lesson[] 
   }));
 }
 
-export const LEADERBOARD: Array<{
-  n: string;
-  name: string;
-  grade: number;
-  spec: string;
-  xp: number;
-  today: number;
-  you?: boolean;
-}> = [
+export const LEADERBOARD: Array<{ n: string; name: string; grade: number; spec: string; xp: number; today: number; you?: boolean }> = [
   { n: "01", name: "Aanya Sharma", grade: 12, spec: "Science Stream · PCM", xp: 18420, today: 520 },
   { n: "02", name: "Vihaan Mehta", grade: 11, spec: "Science · PCB", xp: 17890, today: 410 },
   { n: "03", name: "You", grade: 10, spec: "Class 10 — Board Prep", xp: 16240, today: 380, you: true },
@@ -228,6 +129,8 @@ export const LEADERBOARD: Array<{
 ];
 
 export const GAMES = [
+  { slug: "memory-match", title: "Memory Match", subject: "Cognition", desc: "Flip and match concept cards. Trains visual memory and recall under time.", players: "14.2k", grade: "6-12", tone: "brand" as const, icon: "Brain", playable: true },
+  { slug: "quiz-arena", title: "Quiz Arena", subject: "All Subjects", desc: "A timed, lives-based quiz battle with streak bonuses and XP rewards.", players: "21.7k", grade: "6-12", tone: "ember" as const, icon: "Swords", playable: true },
   { slug: "number-ninja", title: "Number Ninja", subject: "Mathematics", desc: "Slice equations before the timer ends. Trains mental math speed.", players: "12.4k", grade: "6-8", tone: "brand" as const, icon: "Sword" },
   { slug: "atom-architect", title: "Atom Architect", subject: "Chemistry", desc: "Build molecules atom-by-atom under chemistry rules.", players: "8.1k", grade: "9-12", tone: "ember" as const, icon: "Atom" },
   { slug: "grammar-galaxy", title: "Grammar Galaxy", subject: "English", desc: "Pilot a spaceship by spotting grammar errors in mission logs.", players: "6.8k", grade: "6-10", tone: "violet" as const, icon: "Rocket" },
@@ -238,6 +141,87 @@ export const GAMES = [
   { slug: "fraction-frenzy", title: "Fraction Frenzy", subject: "Mathematics", desc: "Match fractions, decimals, and percentages at lightning speed.", players: "7.1k", grade: "6-8", tone: "violet" as const, icon: "PieChart" },
 ];
 
-export function getCourse(slug: string) {
-  return COURSES.find((c) => c.slug === slug);
-}
+export function getCourse(slug: string) { return COURSES.find((c) => c.slug === slug); }
+
+/* ---------- Advanced learning modes (mirrors ShikshaSarthi backend) ---------- */
+
+export const LEARNING_MODES = [
+  { slug: "mat", title: "Mental Ability Tests", desc: "Adaptive MAT practice with animated reasoning patterns, Hindi + English.", icon: "BrainCircuit", to: "/mat", tone: "brand" },
+  { slug: "audio", title: "Audio Quizzes", desc: "Listen-and-answer drills for languages, comprehension, and chemistry naming.", icon: "Headphones", to: "/courses", tone: "violet" },
+  { slug: "video", title: "Video Quizzes", desc: "Pause-the-video assessments with explanations woven into every clip.", icon: "Video", to: "/courses", tone: "azure" },
+  { slug: "experiments", title: "Virtual Experiments", desc: "Simulated physics, chemistry, biology labs you can run from any laptop.", icon: "FlaskConical", to: "/experiments", tone: "ember" },
+  { slug: "puzzles", title: "Puzzles & Memory", desc: "Memory Match, Match Pieces, logic boards — turn revision into play.", icon: "Puzzle", to: "/puzzles", tone: "rose" },
+  { slug: "vocabulary", title: "Vocabulary Builder", desc: "Daily word streaks, idioms, and exam-aligned word lists by chapter.", icon: "BookA", to: "/vocabulary", tone: "amber" },
+] as const;
+
+export const MAT_TOPICS = [
+  { slug: "series", title: "Number & Letter Series", questions: 42, level: "Foundation" },
+  { slug: "analogies", title: "Verbal & Figural Analogies", questions: 38, level: "Core" },
+  { slug: "coding", title: "Coding & Decoding", questions: 36, level: "Core" },
+  { slug: "blood-relations", title: "Blood Relations", questions: 28, level: "Advanced" },
+  { slug: "direction", title: "Direction Sense", questions: 24, level: "Foundation" },
+  { slug: "syllogism", title: "Syllogisms", questions: 32, level: "Advanced" },
+  { slug: "patterns", title: "Pattern Completion", questions: 30, level: "Core" },
+  { slug: "ranking", title: "Order & Ranking", questions: 22, level: "Foundation" },
+];
+
+export const EXPERIMENTS = [
+  { slug: "ohms-law", title: "Verify Ohm's Law", subject: "Physics", grade: "9-10", duration: "12 min", desc: "Vary voltage across a resistor and plot V–I to confirm V = IR." },
+  { slug: "pendulum", title: "Simple Pendulum", subject: "Physics", grade: "9-11", duration: "10 min", desc: "Measure time period for varying lengths and derive g." },
+  { slug: "ph-indicators", title: "pH of Common Solutions", subject: "Chemistry", grade: "8-10", duration: "9 min", desc: "Test acidic and basic solutions using a universal indicator." },
+  { slug: "photosynthesis", title: "Light & Photosynthesis", subject: "Biology", grade: "7-10", duration: "8 min", desc: "Observe oxygen release from aquatic plants under varying light." },
+  { slug: "refraction", title: "Refraction Through Glass Slab", subject: "Physics", grade: "10", duration: "11 min", desc: "Trace ray paths and measure refractive index." },
+  { slug: "electrolysis", title: "Electrolysis of Water", subject: "Chemistry", grade: "9-11", duration: "10 min", desc: "Split water into hydrogen and oxygen, measure the 2:1 ratio." },
+];
+
+export const PUZZLES = [
+  { slug: "memory-match", title: "Memory Match", desc: "Flip identical pairs of concept cards from memory.", icon: "Brain", to: "/games/memory-match" },
+  { slug: "match-pieces", title: "Match the Pieces", desc: "Drag concept tiles to their matching definitions.", icon: "PuzzlePiece", to: "/puzzles" },
+  { slug: "logic-grid", title: "Logic Grid", desc: "Deduce solutions from clue sets — classic logic puzzles.", icon: "Grid3x3", to: "/puzzles" },
+  { slug: "shape-sort", title: "Shape Sort", desc: "Sort 3D nets and shapes into geometric categories.", icon: "Shapes", to: "/puzzles" },
+];
+
+export const VOCAB_CHAPTERS = [
+  { slug: "foundations", title: "Foundations", grade: "6-7", words: 120 },
+  { slug: "intermediate", title: "Intermediate", grade: "8-9", words: 180 },
+  { slug: "board", title: "Board Essentials", grade: "10", words: 240 },
+  { slug: "advanced", title: "Advanced", grade: "11-12", words: 320 },
+  { slug: "idioms", title: "Idioms & Phrases", grade: "8-12", words: 160 },
+  { slug: "academic", title: "Academic Word List", grade: "11-12", words: 280 },
+];
+
+export const ROLE_SECTIONS = [
+  { slug: "students", title: "For Students", to: "/for-students", desc: "Learn fast with games, quizzes, virtual labs, and adaptive practice.", icon: "GraduationCap" },
+  { slug: "teachers", title: "For Teachers", to: "/for-teachers", desc: "Create quizzes, assign work, and watch every student's growth in real time.", icon: "Presentation" },
+  { slug: "schools", title: "For Schools", to: "/for-schools", desc: "Admin tools, feedback forms, analytics across every classroom in your school.", icon: "Building2" },
+];
+
+/* ---------- Mock Quiz Bank for the playable Quiz Arena ---------- */
+
+export type QuizQuestion = { q: string; choices: string[]; answer: number; explain: string };
+
+export const QUIZ_BANK: QuizQuestion[] = [
+  { q: "Which planet has the most moons (as of 2024)?", choices: ["Jupiter","Saturn","Uranus","Neptune"], answer: 1, explain: "Saturn overtook Jupiter with 146+ confirmed moons." },
+  { q: "Square root of 169?", choices: ["11","12","13","14"], answer: 2, explain: "13 × 13 = 169." },
+  { q: "Which is NOT a noble gas?", choices: ["Helium","Argon","Nitrogen","Neon"], answer: 2, explain: "Nitrogen is a diatomic gas, not noble." },
+  { q: "Capital of Australia?", choices: ["Sydney","Melbourne","Canberra","Perth"], answer: 2, explain: "Canberra has been the capital since 1927." },
+  { q: "Who wrote 'The Discovery of India'?", choices: ["Tagore","Nehru","Gandhi","Sarojini Naidu"], answer: 1, explain: "Written by Jawaharlal Nehru in Ahmadnagar Fort prison." },
+  { q: "If 2x + 6 = 20, x = ?", choices: ["5","6","7","8"], answer: 2, explain: "2x = 14 → x = 7." },
+  { q: "Powerhouse of the cell?", choices: ["Nucleus","Ribosome","Mitochondria","Golgi"], answer: 2, explain: "Mitochondria produce ATP." },
+  { q: "Which is a Prime Number?", choices: ["21","27","29","33"], answer: 2, explain: "29 has only two factors: 1 and itself." },
+  { q: "SI unit of force?", choices: ["Joule","Newton","Watt","Pascal"], answer: 1, explain: "Force is measured in Newtons (N = kg·m/s²)." },
+  { q: "Longest river in India?", choices: ["Yamuna","Ganga","Brahmaputra","Godavari"], answer: 1, explain: "The Ganga is ~2,525 km long." },
+];
+
+/* ---------- Memory Match deck ---------- */
+
+export const MEMORY_DECK = [
+  { id: "fe", label: "Iron", match: "Fe" },
+  { id: "au", label: "Gold", match: "Au" },
+  { id: "ag", label: "Silver", match: "Ag" },
+  { id: "na", label: "Sodium", match: "Na" },
+  { id: "h2o", label: "Water", match: "H₂O" },
+  { id: "co2", label: "Carbon Dioxide", match: "CO₂" },
+  { id: "pi", label: "Pi", match: "3.14159" },
+  { id: "e", label: "Euler's number", match: "2.71828" },
+];
