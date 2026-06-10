@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Atom, Code2, Compass, Gamepad2, Leaf, Magnet, PieChart, Rocket, Sword, Trophy, Users } from "lucide-react";
+import { Atom, Brain, Code2, Compass, Gamepad2, Leaf, Magnet, PieChart, Rocket, Sword, Swords, Trophy, Users } from "lucide-react";
 import { GAMES } from "@/lib/lms-data";
 
-const ICONS: Record<string, any> = { Sword, Atom, Rocket, Magnet, Compass, Code2, Leaf, PieChart };
+const ICONS: Record<string, any> = { Sword, Swords, Brain, Atom, Rocket, Magnet, Compass, Code2, Leaf, PieChart };
 
 export const Route = createFileRoute("/games")({
   head: () => ({
