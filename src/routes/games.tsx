@@ -40,7 +40,7 @@ function GamesPage() {
         {GAMES.map((g) => {
           const Icon = ICONS[g.icon] ?? Gamepad2;
           const playable = (g as any).playable;
-          const to = playable ? `/games/${g.slug}` : "/auth";
+          
           return (
             <div key={g.slug} className="group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-6 transition-all hover:-translate-y-0.5 hover:shadow-lg">
               <div className="absolute -right-10 -top-10 size-40 rounded-full bg-brand/10 blur-2xl transition-opacity group-hover:opacity-100" />
