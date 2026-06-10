@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowRight, Github, LogOut, Menu, Sparkles, Twitter, User, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Github, LogOut, Menu, Sparkles, Twitter, User, X } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,8 +37,22 @@ const NAV_LINKS = [
   { to: "/pricing", label: "Pricing" },
 ] as const;
 
+const FOR_LINKS = [
+  { to: "/for-students", label: "For Students", desc: "Adaptive courses, games, MAT" },
+  { to: "/for-teachers", label: "For Teachers", desc: "Quizzes, analytics, feedback" },
+  { to: "/for-schools", label: "For Schools", desc: "Multi-classroom admin tools" },
+] as const;
+
+const LEARN_LINKS = [
+  { to: "/mat", label: "Mental Ability Tests" },
+  { to: "/experiments", label: "Virtual Experiments" },
+  { to: "/puzzles", label: "Puzzles" },
+  { to: "/vocabulary", label: "Vocabulary" },
+] as const;
+
 function Nav() {
   const [open, setOpen] = useState(false);
+  const [hoverMenu, setHoverMenu] = useState<"for" | "learn" | null>(null);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -46,19 +60,32 @@ function Nav() {
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-black/[0.06] bg-canvas/75 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           <Logo />
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="hidden items-center gap-5 md:flex">
+            <DropdownTrigger label="Platform" open={hoverMenu === "for"} onEnter={() => setHoverMenu("for")} onLeave={() => setHoverMenu(null)}>
+              <div className="grid w-[440px] grid-cols-1 gap-1 p-2">
+                {FOR_LINKS.map((l) => (
+                  <Link key={l.to} to={l.to} className="rounded-lg px-3 py-2 hover:bg-zinc-100" onClick={() => setHoverMenu(null)}>
+                    <div className="text-sm font-medium">{l.label}</div>
+                    <div className="text-xs text-zinc-500">{l.desc}</div>
+                  </Link>
+                ))}
+              </div>
+            </DropdownTrigger>
+            <DropdownTrigger label="Learn" open={hoverMenu === "learn"} onEnter={() => setHoverMenu("learn")} onLeave={() => setHoverMenu(null)}>
+              <div className="grid w-[260px] grid-cols-1 gap-0.5 p-2">
+                {LEARN_LINKS.map((l) => (
+                  <Link key={l.to} to={l.to} className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-zinc-100" onClick={() => setHoverMenu(null)}>
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </DropdownTrigger>
             {NAV_LINKS.map((l) => {
               const active = pathname === l.to || pathname.startsWith(l.to + "/");
               return (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  className={`text-sm font-medium transition-colors ${
-                    active ? "text-ink" : "text-zinc-500 hover:text-ink"
-                  }`}
-                >
+                <Link key={l.to} to={l.to} className={`text-sm font-medium transition-colors ${active ? "text-ink" : "text-zinc-500 hover:text-ink"}`}>
                   {l.label}
                 </Link>
               );
@@ -68,45 +95,22 @@ function Nav() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              <Link
-                to="/dashboard"
-                className="hidden h-8 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex"
-              >
-                <User className="size-3.5" />
-                {user.email?.split("@")[0]}
+              <Link to="/dashboard" className="hidden h-8 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex">
+                <User className="size-3.5" />{user.email?.split("@")[0]}
               </Link>
-              <button
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  navigate({ to: "/" });
-                }}
-                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-ink px-3 text-sm font-medium text-white"
-              >
+              <button onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/" }); }} className="inline-flex h-8 items-center gap-1.5 rounded-full bg-ink px-3 text-sm font-medium text-white">
                 <LogOut className="size-3.5" /> Sign out
               </button>
             </>
           ) : (
             <>
-              <Link
-                to="/auth"
-                className="hidden h-8 items-center px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex"
-              >
-                Log in
-              </Link>
-              <Link
-                to="/auth"
-                search={{ mode: "signup" }}
-                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-ink px-4 text-sm font-medium text-white ring-1 ring-ink transition-transform hover:scale-[1.02]"
-              >
+              <Link to="/auth" className="hidden h-8 items-center px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex">Log in</Link>
+              <Link to="/auth" search={{ mode: "signup" }} className="inline-flex h-8 items-center gap-1.5 rounded-full bg-ink px-4 text-sm font-medium text-white ring-1 ring-ink transition-transform hover:scale-[1.02]">
                 Start free <ArrowRight className="size-3.5" />
               </Link>
             </>
           )}
-          <button
-            onClick={() => setOpen((v) => !v)}
-            className="ml-1 grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] md:hidden"
-            aria-label="Menu"
-          >
+          <button onClick={() => setOpen((v) => !v)} className="ml-1 grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] md:hidden" aria-label="Menu">
             {open ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>
         </div>
@@ -114,29 +118,33 @@ function Nav() {
       {open && (
         <div className="border-t border-black/[0.06] bg-canvas/95 md:hidden">
           <div className="mx-auto max-w-7xl space-y-1 px-4 py-4">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-              >
+            {[...FOR_LINKS, ...LEARN_LINKS, ...NAV_LINKS].map((l) => (
+              <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="block rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">
                 {l.label}
               </Link>
             ))}
             {!user && (
-              <Link
-                to="/auth"
-                onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
-              >
-                Log in
-              </Link>
+              <Link to="/auth" onClick={() => setOpen(false)} className="block rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">Log in</Link>
             )}
           </div>
         </div>
       )}
     </nav>
+  );
+}
+
+function DropdownTrigger({ label, open, onEnter, onLeave, children }: { label: string; open: boolean; onEnter: () => void; onLeave: () => void; children: React.ReactNode }) {
+  return (
+    <div className="relative" onMouseEnter={onEnter} onMouseLeave={onLeave}>
+      <button className={`inline-flex items-center gap-1 text-sm font-medium transition-colors ${open ? "text-ink" : "text-zinc-500 hover:text-ink"}`}>
+        {label} <ChevronDown className="size-3" />
+      </button>
+      {open && (
+        <div className="absolute left-0 top-full pt-2">
+          <div className="rounded-xl border border-black/[0.06] bg-white shadow-lg">{children}</div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -148,42 +156,37 @@ function Footer() {
           <div className="max-w-xs space-y-5">
             <Logo />
             <p className="text-sm text-zinc-500">
-              The brilliant learning platform for students of class 6 to 12 — courses, games,
-              and adaptive practice that work even offline.
+              The brilliant learning platform for students of class 6 to 12 — courses, games, virtual labs, and adaptive practice that work even offline.
             </p>
             <div className="flex gap-2">
-              <a href="#" className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50" aria-label="Twitter">
-                <Twitter className="size-3.5 text-zinc-500" />
-              </a>
-              <a href="#" className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50" aria-label="GitHub">
-                <Github className="size-3.5 text-zinc-500" />
-              </a>
+              <a href="#" className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50" aria-label="Twitter"><Twitter className="size-3.5 text-zinc-500" /></a>
+              <a href="#" className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50" aria-label="GitHub"><Github className="size-3.5 text-zinc-500" /></a>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-12 md:grid-cols-4">
             <FooterCol h="Learn" links={[
               { to: "/courses", label: "All courses" },
-              { to: "/courses", label: "Class 6 – 8" },
-              { to: "/courses", label: "Class 10 (Board)" },
-              { to: "/courses", label: "Class 12 (Board)" },
+              { to: "/mat", label: "Mental Ability" },
+              { to: "/experiments", label: "Virtual Labs" },
+              { to: "/vocabulary", label: "Vocabulary" },
+            ]}/>
+            <FooterCol h="Play" links={[
+              { to: "/games", label: "All games" },
+              { to: "/games/memory-match", label: "Memory Match" },
+              { to: "/games/quiz-arena", label: "Quiz Arena" },
+              { to: "/puzzles", label: "Puzzles" },
             ]}/>
             <FooterCol h="Platform" links={[
-              { to: "/games", label: "Educational Games" },
+              { to: "/for-students", label: "For Students" },
+              { to: "/for-teachers", label: "For Teachers" },
+              { to: "/for-schools", label: "For Schools" },
               { to: "/leaderboard", label: "Leaderboard" },
-              { to: "/dashboard", label: "Dashboard" },
-              { to: "/pricing", label: "Pricing" },
             ]}/>
             <FooterCol h="Company" links={[
               { to: "/about", label: "About" },
-              { to: "/about", label: "Careers" },
-              { to: "/about", label: "Press" },
-              { to: "/about", label: "Contact" },
-            ]}/>
-            <FooterCol h="Legal" links={[
+              { to: "/pricing", label: "Pricing" },
               { to: "/about", label: "Privacy" },
               { to: "/about", label: "Terms" },
-              { to: "/about", label: "Security" },
-              { to: "/about", label: "DPA" },
             ]}/>
           </div>
         </div>
@@ -192,8 +195,7 @@ function Footer() {
             © 2026 Shiksha Saarthi Learning. Made with <Sparkles className="inline size-3 text-brand" /> for curious minds.
           </span>
           <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-400">
-            <span className="size-1.5 rounded-full bg-brand" />
-            All systems operational
+            <span className="size-1.5 rounded-full bg-brand" /> All systems operational
           </span>
         </div>
       </div>
@@ -208,9 +210,7 @@ function FooterCol({ h, links }: { h: string; links: { to: string; label: string
       <ul className="space-y-2">
         {links.map((l, i) => (
           <li key={i}>
-            <Link to={l.to} className="text-sm text-zinc-600 transition-colors hover:text-ink">
-              {l.label}
-            </Link>
+            <Link to={l.to} className="text-sm text-zinc-600 transition-colors hover:text-ink">{l.label}</Link>
           </li>
         ))}
       </ul>
