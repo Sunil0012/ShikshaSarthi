@@ -9,21 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VocabularyRouteImport } from './routes/vocabulary'
+import { Route as PuzzlesRouteImport } from './routes/puzzles'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as MatRouteImport } from './routes/mat'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as GamesRouteImport } from './routes/games'
+import { Route as ForTeachersRouteImport } from './routes/for-teachers'
+import { Route as ForStudentsRouteImport } from './routes/for-students'
+import { Route as ForSchoolsRouteImport } from './routes/for-schools'
+import { Route as ExperimentsRouteImport } from './routes/experiments'
 import { Route as CoursesRouteImport } from './routes/courses'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GamesQuizArenaRouteImport } from './routes/games.quiz-arena'
+import { Route as GamesMemoryMatchRouteImport } from './routes/games.memory-match'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
+import { Route as AuthenticatedTeacherRouteImport } from './routes/_authenticated/teacher'
+import { Route as AuthenticatedSchoolAdminRouteImport } from './routes/_authenticated/school-admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 
+const VocabularyRoute = VocabularyRouteImport.update({
+  id: '/vocabulary',
+  path: '/vocabulary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PuzzlesRoute = PuzzlesRouteImport.update({
+  id: '/puzzles',
+  path: '/puzzles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatRoute = MatRouteImport.update({
+  id: '/mat',
+  path: '/mat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeaderboardRoute = LeaderboardRouteImport.update({
@@ -34,6 +60,26 @@ const LeaderboardRoute = LeaderboardRouteImport.update({
 const GamesRoute = GamesRouteImport.update({
   id: '/games',
   path: '/games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForTeachersRoute = ForTeachersRouteImport.update({
+  id: '/for-teachers',
+  path: '/for-teachers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForStudentsRoute = ForStudentsRouteImport.update({
+  id: '/for-students',
+  path: '/for-students',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForSchoolsRoute = ForSchoolsRouteImport.update({
+  id: '/for-schools',
+  path: '/for-schools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExperimentsRoute = ExperimentsRouteImport.update({
+  id: '/experiments',
+  path: '/experiments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesRoute = CoursesRouteImport.update({
@@ -60,11 +106,32 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GamesQuizArenaRoute = GamesQuizArenaRouteImport.update({
+  id: '/quiz-arena',
+  path: '/quiz-arena',
+  getParentRoute: () => GamesRoute,
+} as any)
+const GamesMemoryMatchRoute = GamesMemoryMatchRouteImport.update({
+  id: '/memory-match',
+  path: '/memory-match',
+  getParentRoute: () => GamesRoute,
+} as any)
 const CoursesSlugRoute = CoursesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => CoursesRoute,
 } as any)
+const AuthenticatedTeacherRoute = AuthenticatedTeacherRouteImport.update({
+  id: '/teacher',
+  path: '/teacher',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSchoolAdminRoute =
+  AuthenticatedSchoolAdminRouteImport.update({
+    id: '/school-admin',
+    path: '/school-admin',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -81,11 +148,22 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/games': typeof GamesRoute
+  '/experiments': typeof ExperimentsRoute
+  '/for-schools': typeof ForSchoolsRoute
+  '/for-students': typeof ForStudentsRoute
+  '/for-teachers': typeof ForTeachersRoute
+  '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
+  '/mat': typeof MatRoute
   '/pricing': typeof PricingRoute
+  '/puzzles': typeof PuzzlesRoute
+  '/vocabulary': typeof VocabularyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/school-admin': typeof AuthenticatedSchoolAdminRoute
+  '/teacher': typeof AuthenticatedTeacherRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/games/memory-match': typeof GamesMemoryMatchRoute
+  '/games/quiz-arena': typeof GamesQuizArenaRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRoute
 }
 export interface FileRoutesByTo {
@@ -93,11 +171,22 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/games': typeof GamesRoute
+  '/experiments': typeof ExperimentsRoute
+  '/for-schools': typeof ForSchoolsRoute
+  '/for-students': typeof ForStudentsRoute
+  '/for-teachers': typeof ForTeachersRoute
+  '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
+  '/mat': typeof MatRoute
   '/pricing': typeof PricingRoute
+  '/puzzles': typeof PuzzlesRoute
+  '/vocabulary': typeof VocabularyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/school-admin': typeof AuthenticatedSchoolAdminRoute
+  '/teacher': typeof AuthenticatedTeacherRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/games/memory-match': typeof GamesMemoryMatchRoute
+  '/games/quiz-arena': typeof GamesQuizArenaRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRoute
 }
 export interface FileRoutesById {
@@ -107,11 +196,22 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/games': typeof GamesRoute
+  '/experiments': typeof ExperimentsRoute
+  '/for-schools': typeof ForSchoolsRoute
+  '/for-students': typeof ForStudentsRoute
+  '/for-teachers': typeof ForTeachersRoute
+  '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
+  '/mat': typeof MatRoute
   '/pricing': typeof PricingRoute
+  '/puzzles': typeof PuzzlesRoute
+  '/vocabulary': typeof VocabularyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/school-admin': typeof AuthenticatedSchoolAdminRoute
+  '/_authenticated/teacher': typeof AuthenticatedTeacherRoute
   '/courses/$slug': typeof CoursesSlugRoute
+  '/games/memory-match': typeof GamesMemoryMatchRoute
+  '/games/quiz-arena': typeof GamesQuizArenaRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRoute
 }
 export interface FileRouteTypes {
@@ -121,11 +221,22 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/courses'
+    | '/experiments'
+    | '/for-schools'
+    | '/for-students'
+    | '/for-teachers'
     | '/games'
     | '/leaderboard'
+    | '/mat'
     | '/pricing'
+    | '/puzzles'
+    | '/vocabulary'
     | '/dashboard'
+    | '/school-admin'
+    | '/teacher'
     | '/courses/$slug'
+    | '/games/memory-match'
+    | '/games/quiz-arena'
     | '/learn/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -133,11 +244,22 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/courses'
+    | '/experiments'
+    | '/for-schools'
+    | '/for-students'
+    | '/for-teachers'
     | '/games'
     | '/leaderboard'
+    | '/mat'
     | '/pricing'
+    | '/puzzles'
+    | '/vocabulary'
     | '/dashboard'
+    | '/school-admin'
+    | '/teacher'
     | '/courses/$slug'
+    | '/games/memory-match'
+    | '/games/quiz-arena'
     | '/learn/$slug'
   id:
     | '__root__'
@@ -146,11 +268,22 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/courses'
+    | '/experiments'
+    | '/for-schools'
+    | '/for-students'
+    | '/for-teachers'
     | '/games'
     | '/leaderboard'
+    | '/mat'
     | '/pricing'
+    | '/puzzles'
+    | '/vocabulary'
     | '/_authenticated/dashboard'
+    | '/_authenticated/school-admin'
+    | '/_authenticated/teacher'
     | '/courses/$slug'
+    | '/games/memory-match'
+    | '/games/quiz-arena'
     | '/_authenticated/learn/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -160,18 +293,46 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   CoursesRoute: typeof CoursesRouteWithChildren
-  GamesRoute: typeof GamesRoute
+  ExperimentsRoute: typeof ExperimentsRoute
+  ForSchoolsRoute: typeof ForSchoolsRoute
+  ForStudentsRoute: typeof ForStudentsRoute
+  ForTeachersRoute: typeof ForTeachersRoute
+  GamesRoute: typeof GamesRouteWithChildren
   LeaderboardRoute: typeof LeaderboardRoute
+  MatRoute: typeof MatRoute
   PricingRoute: typeof PricingRoute
+  PuzzlesRoute: typeof PuzzlesRoute
+  VocabularyRoute: typeof VocabularyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vocabulary': {
+      id: '/vocabulary'
+      path: '/vocabulary'
+      fullPath: '/vocabulary'
+      preLoaderRoute: typeof VocabularyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/puzzles': {
+      id: '/puzzles'
+      path: '/puzzles'
+      fullPath: '/puzzles'
+      preLoaderRoute: typeof PuzzlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mat': {
+      id: '/mat'
+      path: '/mat'
+      fullPath: '/mat'
+      preLoaderRoute: typeof MatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leaderboard': {
@@ -186,6 +347,34 @@ declare module '@tanstack/react-router' {
       path: '/games'
       fullPath: '/games'
       preLoaderRoute: typeof GamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-teachers': {
+      id: '/for-teachers'
+      path: '/for-teachers'
+      fullPath: '/for-teachers'
+      preLoaderRoute: typeof ForTeachersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-students': {
+      id: '/for-students'
+      path: '/for-students'
+      fullPath: '/for-students'
+      preLoaderRoute: typeof ForStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-schools': {
+      id: '/for-schools'
+      path: '/for-schools'
+      fullPath: '/for-schools'
+      preLoaderRoute: typeof ForSchoolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experiments': {
+      id: '/experiments'
+      path: '/experiments'
+      fullPath: '/experiments'
+      preLoaderRoute: typeof ExperimentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/courses': {
@@ -223,12 +412,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/games/quiz-arena': {
+      id: '/games/quiz-arena'
+      path: '/quiz-arena'
+      fullPath: '/games/quiz-arena'
+      preLoaderRoute: typeof GamesQuizArenaRouteImport
+      parentRoute: typeof GamesRoute
+    }
+    '/games/memory-match': {
+      id: '/games/memory-match'
+      path: '/memory-match'
+      fullPath: '/games/memory-match'
+      preLoaderRoute: typeof GamesMemoryMatchRouteImport
+      parentRoute: typeof GamesRoute
+    }
     '/courses/$slug': {
       id: '/courses/$slug'
       path: '/$slug'
       fullPath: '/courses/$slug'
       preLoaderRoute: typeof CoursesSlugRouteImport
       parentRoute: typeof CoursesRoute
+    }
+    '/_authenticated/teacher': {
+      id: '/_authenticated/teacher'
+      path: '/teacher'
+      fullPath: '/teacher'
+      preLoaderRoute: typeof AuthenticatedTeacherRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/school-admin': {
+      id: '/_authenticated/school-admin'
+      path: '/school-admin'
+      fullPath: '/school-admin'
+      preLoaderRoute: typeof AuthenticatedSchoolAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -249,11 +466,15 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSchoolAdminRoute: typeof AuthenticatedSchoolAdminRoute
+  AuthenticatedTeacherRoute: typeof AuthenticatedTeacherRoute
   AuthenticatedLearnSlugRoute: typeof AuthenticatedLearnSlugRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSchoolAdminRoute: AuthenticatedSchoolAdminRoute,
+  AuthenticatedTeacherRoute: AuthenticatedTeacherRoute,
   AuthenticatedLearnSlugRoute: AuthenticatedLearnSlugRoute,
 }
 
@@ -271,15 +492,34 @@ const CoursesRouteChildren: CoursesRouteChildren = {
 const CoursesRouteWithChildren =
   CoursesRoute._addFileChildren(CoursesRouteChildren)
 
+interface GamesRouteChildren {
+  GamesMemoryMatchRoute: typeof GamesMemoryMatchRoute
+  GamesQuizArenaRoute: typeof GamesQuizArenaRoute
+}
+
+const GamesRouteChildren: GamesRouteChildren = {
+  GamesMemoryMatchRoute: GamesMemoryMatchRoute,
+  GamesQuizArenaRoute: GamesQuizArenaRoute,
+}
+
+const GamesRouteWithChildren = GamesRoute._addFileChildren(GamesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   CoursesRoute: CoursesRouteWithChildren,
-  GamesRoute: GamesRoute,
+  ExperimentsRoute: ExperimentsRoute,
+  ForSchoolsRoute: ForSchoolsRoute,
+  ForStudentsRoute: ForStudentsRoute,
+  ForTeachersRoute: ForTeachersRoute,
+  GamesRoute: GamesRouteWithChildren,
   LeaderboardRoute: LeaderboardRoute,
+  MatRoute: MatRoute,
   PricingRoute: PricingRoute,
+  PuzzlesRoute: PuzzlesRoute,
+  VocabularyRoute: VocabularyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
