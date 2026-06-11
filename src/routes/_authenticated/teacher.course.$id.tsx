@@ -138,8 +138,8 @@ function LessonEditor({ lesson, index, reload, open, onOpen }: any) {
     setSavingQ(false);
     loadQuizzes();
   }
-  async function updateQuiz(q: any, patch: Record<string, unknown>) {
-    await supabase.from("teacher_quizzes").update(patch).eq("id", q.id);
+  async function updateQuiz(q: any, patch: Partial<{ question: string; options: string[]; correct_index: number; explanation: string | null }>) {
+    await supabase.from("teacher_quizzes").update(patch as any).eq("id", q.id);
     loadQuizzes();
   }
   async function deleteQuiz(qid: string) {
