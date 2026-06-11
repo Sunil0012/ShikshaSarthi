@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as PuzzlesRouteImport } from './routes/puzzles'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MatRouteImport } from './routes/mat'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as GamesRouteImport } from './routes/games'
@@ -40,11 +39,6 @@ const VocabularyRoute = VocabularyRouteImport.update({
 const PuzzlesRoute = PuzzlesRouteImport.update({
   id: '/puzzles',
   path: '/puzzles',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MatRoute = MatRouteImport.update({
@@ -155,7 +149,6 @@ export interface FileRoutesByFullPath {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRoute
-  '/pricing': typeof PricingRoute
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -178,7 +171,6 @@ export interface FileRoutesByTo {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRoute
-  '/pricing': typeof PricingRoute
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -203,7 +195,6 @@ export interface FileRoutesById {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRoute
-  '/pricing': typeof PricingRoute
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -228,7 +219,6 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
-    | '/pricing'
     | '/puzzles'
     | '/vocabulary'
     | '/dashboard'
@@ -251,7 +241,6 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
-    | '/pricing'
     | '/puzzles'
     | '/vocabulary'
     | '/dashboard'
@@ -275,7 +264,6 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
-    | '/pricing'
     | '/puzzles'
     | '/vocabulary'
     | '/_authenticated/dashboard'
@@ -300,7 +288,6 @@ export interface RootRouteChildren {
   GamesRoute: typeof GamesRouteWithChildren
   LeaderboardRoute: typeof LeaderboardRoute
   MatRoute: typeof MatRoute
-  PricingRoute: typeof PricingRoute
   PuzzlesRoute: typeof PuzzlesRoute
   VocabularyRoute: typeof VocabularyRoute
 }
@@ -319,13 +306,6 @@ declare module '@tanstack/react-router' {
       path: '/puzzles'
       fullPath: '/puzzles'
       preLoaderRoute: typeof PuzzlesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mat': {
@@ -517,7 +497,6 @@ const rootRouteChildren: RootRouteChildren = {
   GamesRoute: GamesRouteWithChildren,
   LeaderboardRoute: LeaderboardRoute,
   MatRoute: MatRoute,
-  PricingRoute: PricingRoute,
   PuzzlesRoute: PuzzlesRoute,
   VocabularyRoute: VocabularyRoute,
 }
