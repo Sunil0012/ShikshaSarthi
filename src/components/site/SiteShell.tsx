@@ -29,17 +29,9 @@ export function Logo({ withWord = true }: { withWord?: boolean }) {
   );
 }
 
-const NAV_LINKS = [
-  { to: "/courses", label: "Courses" },
-  { to: "/games", label: "Games" },
-  { to: "/leaderboard", label: "Leaderboard" },
-  { to: "/dashboard", label: "Dashboard" },
-  { to: "/pricing", label: "Pricing" },
-] as const;
-
 const FOR_LINKS = [
   { to: "/for-students", label: "For Students", desc: "Adaptive courses, games, MAT" },
-  { to: "/for-teachers", label: "For Teachers", desc: "Quizzes, analytics, feedback" },
+  { to: "/for-teachers", label: "For Teachers", desc: "Build courses, quizzes, analytics" },
   { to: "/for-schools", label: "For Schools", desc: "Multi-classroom admin tools" },
 ] as const;
 
@@ -54,8 +46,15 @@ function Nav() {
   const [open, setOpen] = useState(false);
   const [hoverMenu, setHoverMenu] = useState<"for" | "learn" | null>(null);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
+
+  const navLinks: { to: string; label: string }[] = [
+    { to: "/courses", label: "Courses" },
+    { to: "/games", label: "Games" },
+  ];
+  if (role === "teacher" || role === "admin") navLinks.push({ to: "/leaderboard", label: "Leaderboard" });
+  if (user) navLinks.push({ to: "/dashboard", label: "Dashboard" });
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-black/[0.06] bg-canvas/75 backdrop-blur-xl">
@@ -82,7 +81,7 @@ function Nav() {
                 ))}
               </div>
             </DropdownTrigger>
-            {NAV_LINKS.map((l) => {
+            {navLinks.map((l) => {
               const active = pathname === l.to || pathname.startsWith(l.to + "/");
               return (
                 <Link key={l.to} to={l.to} className={`text-sm font-medium transition-colors ${active ? "text-ink" : "text-zinc-500 hover:text-ink"}`}>
@@ -95,6 +94,7 @@ function Nav() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
+              {role && <span className="hidden rounded-full bg-brand-muted px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-brand md:inline-flex">{role}</span>}
               <Link to="/dashboard" className="hidden h-8 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-zinc-600 transition-colors hover:text-ink md:inline-flex">
                 <User className="size-3.5" />{user.email?.split("@")[0]}
               </Link>
@@ -118,7 +118,7 @@ function Nav() {
       {open && (
         <div className="border-t border-black/[0.06] bg-canvas/95 md:hidden">
           <div className="mx-auto max-w-7xl space-y-1 px-4 py-4">
-            {[...FOR_LINKS, ...LEARN_LINKS, ...NAV_LINKS].map((l) => (
+            {[...FOR_LINKS, ...LEARN_LINKS, ...navLinks].map((l) => (
               <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="block rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100">
                 {l.label}
               </Link>
@@ -156,7 +156,7 @@ function Footer() {
           <div className="max-w-xs space-y-5">
             <Logo />
             <p className="text-sm text-zinc-500">
-              The brilliant learning platform for students of class 6 to 12 — courses, games, virtual labs, and adaptive practice that work even offline.
+              The brilliant learning platform for class 6 to 12 — courses, games, virtual labs, and adaptive practice.
             </p>
             <div className="flex gap-2">
               <a href="#" className="grid size-8 place-items-center rounded-md ring-1 ring-black/[0.08] hover:bg-zinc-50" aria-label="Twitter"><Twitter className="size-3.5 text-zinc-500" /></a>
@@ -180,11 +180,11 @@ function Footer() {
               { to: "/for-students", label: "For Students" },
               { to: "/for-teachers", label: "For Teachers" },
               { to: "/for-schools", label: "For Schools" },
-              { to: "/leaderboard", label: "Leaderboard" },
-            ]}/>
-            <FooterCol h="Company" links={[
               { to: "/about", label: "About" },
-              { to: "/pricing", label: "Pricing" },
+            ]}/>
+            <FooterCol h="Account" links={[
+              { to: "/auth", label: "Log in" },
+              { to: "/dashboard", label: "Dashboard" },
               { to: "/about", label: "Privacy" },
               { to: "/about", label: "Terms" },
             ]}/>
