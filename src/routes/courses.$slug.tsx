@@ -74,8 +74,8 @@ function CourseDetail() {
           <button onClick={enroll} disabled={loading} className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-white">
             {enrolled ? "Continue learning" : "Enroll free"} <ArrowRight className="size-4" />
           </button>
-          <Link to="/learn/$slug" params={{ slug: course.slug }} className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium ring-1 ring-black/[0.06]">
-            <Play className="size-4" /> Preview lesson
+          <Link to="/student/browse" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium ring-1 ring-black/[0.06]">
+            <Play className="size-4" /> Browse teacher courses
           </Link>
         </div>
       </div>

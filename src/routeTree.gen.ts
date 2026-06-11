@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as PuzzlesRouteImport } from './routes/puzzles'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MatRouteImport } from './routes/mat'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as GamesRouteImport } from './routes/games'
@@ -27,10 +26,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesQuizArenaRouteImport } from './routes/games.quiz-arena'
 import { Route as GamesMemoryMatchRouteImport } from './routes/games.memory-match'
 import { Route as CoursesSlugRouteImport } from './routes/courses.$slug'
-import { Route as AuthenticatedTeacherRouteImport } from './routes/_authenticated/teacher'
-import { Route as AuthenticatedSchoolAdminRouteImport } from './routes/_authenticated/school-admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedTeacherCoursesRouteImport } from './routes/_authenticated/teacher.courses'
+import { Route as AuthenticatedStudentBrowseRouteImport } from './routes/_authenticated/student.browse'
+import { Route as AuthenticatedTeacherCourseIdRouteImport } from './routes/_authenticated/teacher.course.$id'
+import { Route as AuthenticatedStudentCourseIdRouteImport } from './routes/_authenticated/student.course.$id'
 
 const VocabularyRoute = VocabularyRouteImport.update({
   id: '/vocabulary',
@@ -40,11 +41,6 @@ const VocabularyRoute = VocabularyRouteImport.update({
 const PuzzlesRoute = PuzzlesRouteImport.update({
   id: '/puzzles',
   path: '/puzzles',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MatRoute = MatRouteImport.update({
@@ -121,27 +117,40 @@ const CoursesSlugRoute = CoursesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CoursesRoute,
 } as any)
-const AuthenticatedTeacherRoute = AuthenticatedTeacherRouteImport.update({
-  id: '/teacher',
-  path: '/teacher',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSchoolAdminRoute =
-  AuthenticatedSchoolAdminRouteImport.update({
-    id: '/school-admin',
-    path: '/school-admin',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedLearnSlugRoute = AuthenticatedLearnSlugRouteImport.update({
-  id: '/learn/$slug',
-  path: '/learn/$slug',
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTeacherCoursesRoute =
+  AuthenticatedTeacherCoursesRouteImport.update({
+    id: '/teacher/courses',
+    path: '/teacher/courses',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedStudentBrowseRoute =
+  AuthenticatedStudentBrowseRouteImport.update({
+    id: '/student/browse',
+    path: '/student/browse',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTeacherCourseIdRoute =
+  AuthenticatedTeacherCourseIdRouteImport.update({
+    id: '/teacher/course/$id',
+    path: '/teacher/course/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedStudentCourseIdRoute =
+  AuthenticatedStudentCourseIdRouteImport.update({
+    id: '/student/course/$id',
+    path: '/student/course/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -155,16 +164,17 @@ export interface FileRoutesByFullPath {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRoute
-  '/pricing': typeof PricingRoute
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/school-admin': typeof AuthenticatedSchoolAdminRoute
-  '/teacher': typeof AuthenticatedTeacherRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/games/memory-match': typeof GamesMemoryMatchRoute
   '/games/quiz-arena': typeof GamesQuizArenaRoute
-  '/learn/$slug': typeof AuthenticatedLearnSlugRoute
+  '/student/browse': typeof AuthenticatedStudentBrowseRoute
+  '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
+  '/student/course/$id': typeof AuthenticatedStudentCourseIdRoute
+  '/teacher/course/$id': typeof AuthenticatedTeacherCourseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -178,16 +188,17 @@ export interface FileRoutesByTo {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRoute
-  '/pricing': typeof PricingRoute
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/school-admin': typeof AuthenticatedSchoolAdminRoute
-  '/teacher': typeof AuthenticatedTeacherRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/games/memory-match': typeof GamesMemoryMatchRoute
   '/games/quiz-arena': typeof GamesQuizArenaRoute
-  '/learn/$slug': typeof AuthenticatedLearnSlugRoute
+  '/student/browse': typeof AuthenticatedStudentBrowseRoute
+  '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
+  '/student/course/$id': typeof AuthenticatedStudentCourseIdRoute
+  '/teacher/course/$id': typeof AuthenticatedTeacherCourseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -203,16 +214,17 @@ export interface FileRoutesById {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRoute
-  '/pricing': typeof PricingRoute
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/school-admin': typeof AuthenticatedSchoolAdminRoute
-  '/_authenticated/teacher': typeof AuthenticatedTeacherRoute
   '/courses/$slug': typeof CoursesSlugRoute
   '/games/memory-match': typeof GamesMemoryMatchRoute
   '/games/quiz-arena': typeof GamesQuizArenaRoute
-  '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRoute
+  '/_authenticated/student/browse': typeof AuthenticatedStudentBrowseRoute
+  '/_authenticated/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
+  '/_authenticated/student/course/$id': typeof AuthenticatedStudentCourseIdRoute
+  '/_authenticated/teacher/course/$id': typeof AuthenticatedTeacherCourseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -228,16 +240,17 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
-    | '/pricing'
     | '/puzzles'
     | '/vocabulary'
+    | '/admin'
     | '/dashboard'
-    | '/school-admin'
-    | '/teacher'
     | '/courses/$slug'
     | '/games/memory-match'
     | '/games/quiz-arena'
-    | '/learn/$slug'
+    | '/student/browse'
+    | '/teacher/courses'
+    | '/student/course/$id'
+    | '/teacher/course/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -251,16 +264,17 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
-    | '/pricing'
     | '/puzzles'
     | '/vocabulary'
+    | '/admin'
     | '/dashboard'
-    | '/school-admin'
-    | '/teacher'
     | '/courses/$slug'
     | '/games/memory-match'
     | '/games/quiz-arena'
-    | '/learn/$slug'
+    | '/student/browse'
+    | '/teacher/courses'
+    | '/student/course/$id'
+    | '/teacher/course/$id'
   id:
     | '__root__'
     | '/'
@@ -275,16 +289,17 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
-    | '/pricing'
     | '/puzzles'
     | '/vocabulary'
+    | '/_authenticated/admin'
     | '/_authenticated/dashboard'
-    | '/_authenticated/school-admin'
-    | '/_authenticated/teacher'
     | '/courses/$slug'
     | '/games/memory-match'
     | '/games/quiz-arena'
-    | '/_authenticated/learn/$slug'
+    | '/_authenticated/student/browse'
+    | '/_authenticated/teacher/courses'
+    | '/_authenticated/student/course/$id'
+    | '/_authenticated/teacher/course/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -300,7 +315,6 @@ export interface RootRouteChildren {
   GamesRoute: typeof GamesRouteWithChildren
   LeaderboardRoute: typeof LeaderboardRoute
   MatRoute: typeof MatRoute
-  PricingRoute: typeof PricingRoute
   PuzzlesRoute: typeof PuzzlesRoute
   VocabularyRoute: typeof VocabularyRoute
 }
@@ -319,13 +333,6 @@ declare module '@tanstack/react-router' {
       path: '/puzzles'
       fullPath: '/puzzles'
       preLoaderRoute: typeof PuzzlesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mat': {
@@ -433,20 +440,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesSlugRouteImport
       parentRoute: typeof CoursesRoute
     }
-    '/_authenticated/teacher': {
-      id: '/_authenticated/teacher'
-      path: '/teacher'
-      fullPath: '/teacher'
-      preLoaderRoute: typeof AuthenticatedTeacherRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/school-admin': {
-      id: '/_authenticated/school-admin'
-      path: '/school-admin'
-      fullPath: '/school-admin'
-      preLoaderRoute: typeof AuthenticatedSchoolAdminRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -454,28 +447,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/learn/$slug': {
-      id: '/_authenticated/learn/$slug'
-      path: '/learn/$slug'
-      fullPath: '/learn/$slug'
-      preLoaderRoute: typeof AuthenticatedLearnSlugRouteImport
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/teacher/courses': {
+      id: '/_authenticated/teacher/courses'
+      path: '/teacher/courses'
+      fullPath: '/teacher/courses'
+      preLoaderRoute: typeof AuthenticatedTeacherCoursesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/student/browse': {
+      id: '/_authenticated/student/browse'
+      path: '/student/browse'
+      fullPath: '/student/browse'
+      preLoaderRoute: typeof AuthenticatedStudentBrowseRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/teacher/course/$id': {
+      id: '/_authenticated/teacher/course/$id'
+      path: '/teacher/course/$id'
+      fullPath: '/teacher/course/$id'
+      preLoaderRoute: typeof AuthenticatedTeacherCourseIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/student/course/$id': {
+      id: '/_authenticated/student/course/$id'
+      path: '/student/course/$id'
+      fullPath: '/student/course/$id'
+      preLoaderRoute: typeof AuthenticatedStudentCourseIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedSchoolAdminRoute: typeof AuthenticatedSchoolAdminRoute
-  AuthenticatedTeacherRoute: typeof AuthenticatedTeacherRoute
-  AuthenticatedLearnSlugRoute: typeof AuthenticatedLearnSlugRoute
+  AuthenticatedStudentBrowseRoute: typeof AuthenticatedStudentBrowseRoute
+  AuthenticatedTeacherCoursesRoute: typeof AuthenticatedTeacherCoursesRoute
+  AuthenticatedStudentCourseIdRoute: typeof AuthenticatedStudentCourseIdRoute
+  AuthenticatedTeacherCourseIdRoute: typeof AuthenticatedTeacherCourseIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedSchoolAdminRoute: AuthenticatedSchoolAdminRoute,
-  AuthenticatedTeacherRoute: AuthenticatedTeacherRoute,
-  AuthenticatedLearnSlugRoute: AuthenticatedLearnSlugRoute,
+  AuthenticatedStudentBrowseRoute: AuthenticatedStudentBrowseRoute,
+  AuthenticatedTeacherCoursesRoute: AuthenticatedTeacherCoursesRoute,
+  AuthenticatedStudentCourseIdRoute: AuthenticatedStudentCourseIdRoute,
+  AuthenticatedTeacherCourseIdRoute: AuthenticatedTeacherCourseIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -517,20 +542,9 @@ const rootRouteChildren: RootRouteChildren = {
   GamesRoute: GamesRouteWithChildren,
   LeaderboardRoute: LeaderboardRoute,
   MatRoute: MatRoute,
-  PricingRoute: PricingRoute,
   PuzzlesRoute: PuzzlesRoute,
   VocabularyRoute: VocabularyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

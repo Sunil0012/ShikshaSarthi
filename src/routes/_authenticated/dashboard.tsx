@@ -1,152 +1,218 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, BookOpen, Calendar, Flame, Play, Target, Trophy, TrendingUp } from "lucide-react";
-import { COURSES, getCourse } from "@/lib/lms-data";
-import { supabase } from "@/integrations/supabase/client";
+import { Award, BookOpen, Flame, GraduationCap, Plus, ShieldCheck, Sparkles, TrendingUp, Users } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Shiksha Saarthi" }] }),
   component: Dashboard,
 });
 
-type Profile = { full_name: string | null; grade: number | null; xp: number; streak: number; avatar_url: string | null };
-
 function Dashboard() {
-  const { user } = useAuth();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [enrollments, setEnrollments] = useState<string[]>([]);
-  const [progressCount, setProgressCount] = useState(0);
-
-  useEffect(() => {
-    if (!user) return;
-    (async () => {
-      const [{ data: p }, { data: e }, { count }] = await Promise.all([
-        supabase.from("profiles").select("full_name,grade,xp,streak,avatar_url").eq("id", user.id).maybeSingle(),
-        supabase.from("enrollments").select("course_slug").eq("user_id", user.id),
-        supabase.from("lesson_progress").select("*", { count: "exact", head: true }).eq("user_id", user.id),
-      ]);
-      setProfile(p as Profile | null);
-      setEnrollments((e ?? []).map((r) => r.course_slug));
-      setProgressCount(count ?? 0);
-    })();
-  }, [user]);
-
-  const enrolledCourses = enrollments.map((s) => getCourse(s)).filter(Boolean) as typeof COURSES;
-  const recommended = COURSES.filter((c) => !enrollments.includes(c.slug) && (!profile?.grade || c.grade === profile.grade)).slice(0, 3);
-  const name = profile?.full_name || user?.email?.split("@")[0] || "learner";
-
+  const { user, role, loading } = useAuth();
+  if (loading) return null;
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12">
-      <div className="flex flex-wrap items-end justify-between gap-6">
+    <div className="mx-auto max-w-7xl px-6 py-10">
+      <div className="mb-8 flex items-end justify-between">
         <div>
-          <div className="text-xs font-medium uppercase tracking-widest text-zinc-500">Dashboard</div>
-          <h1 className="font-display mt-2 text-4xl font-semibold tracking-tight">
-            Welcome back, <span className="text-brand">{name}</span> 👋
+          <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{role ?? "user"} dashboard</div>
+          <h1 className="font-display mt-1 text-4xl font-semibold tracking-tight">
+            Welcome back, {user?.email?.split("@")[0]}
           </h1>
-          <p className="mt-2 text-zinc-500">
-            {profile?.grade ? `Class ${profile.grade} · ` : ""}Keep your streak going — your future self will thank you.
-          </p>
         </div>
-        <Link to="/courses" className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-white">
-          Browse courses <ArrowRight className="size-4" />
-        </Link>
       </div>
-
-      <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Metric icon={<Flame className="size-5 text-orange-500" />} label="Day streak" value={String(profile?.streak ?? 0)} />
-        <Metric icon={<Trophy className="size-5 text-amber-500" />} label="Total XP" value={(profile?.xp ?? 0).toLocaleString()} />
-        <Metric icon={<BookOpen className="size-5 text-brand" />} label="Enrolled courses" value={String(enrollments.length)} />
-        <Metric icon={<Target className="size-5 text-violet-500" />} label="Lessons completed" value={String(progressCount)} />
-      </div>
-
-      <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <h2 className="font-display text-2xl font-semibold">Continue learning</h2>
-          {enrolledCourses.length === 0 ? (
-            <div className="mt-4 rounded-2xl border border-dashed border-black/[0.1] bg-white p-10 text-center">
-              <p className="text-zinc-500">You haven't enrolled in any courses yet.</p>
-              <Link to="/courses" className="mt-4 inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">
-                Find your first course
-              </Link>
-            </div>
-          ) : (
-            <div className="mt-5 space-y-4">
-              {enrolledCourses.map((c) => (
-                <Link key={c.slug} to="/learn/$slug" params={{ slug: c.slug }} className={`flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-black/[0.06] bg-gradient-to-r ${c.tone} p-5 transition hover:shadow-md`}>
-                  <div className="min-w-0">
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Class {c.grade} · {c.level}</div>
-                    <div className="font-display mt-1 truncate text-lg font-semibold">{c.title}</div>
-                    <div className="mt-2 flex items-center gap-2 text-xs text-zinc-500">
-                      <div className="h-1.5 w-40 overflow-hidden rounded-full bg-zinc-200">
-                        <div className="h-full bg-brand" style={{ width: "32%" }} />
-                      </div>
-                      32% complete
-                    </div>
-                  </div>
-                  <div className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-white">
-                    <Play className="size-4" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-
-          <h2 className="font-display mt-12 text-2xl font-semibold">Recommended for you</h2>
-          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {recommended.map((c) => (
-              <Link key={c.slug} to="/courses/$slug" params={{ slug: c.slug }} className="rounded-2xl border border-black/[0.06] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md">
-                <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Class {c.grade} · {c.level}</div>
-                <div className="font-display mt-2 text-lg font-semibold">{c.title}</div>
-                <p className="mt-1 line-clamp-2 text-xs text-zinc-500">{c.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <aside className="space-y-5">
-          <div className="rounded-2xl border border-black/[0.06] bg-white p-6">
-            <div className="flex items-center justify-between">
-              <div className="font-semibold">Today's plan</div>
-              <Calendar className="size-4 text-zinc-400" />
-            </div>
-            <ul className="mt-4 space-y-3">
-              {[
-                ["Math · Quadratic equations", "20 min"],
-                ["Science drill · Acids & bases", "10 min"],
-                ["English · Reading comprehension", "15 min"],
-              ].map(([t, d]) => (
-                <li key={t} className="flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3 text-sm">
-                  <span>{t}</span><span className="text-xs text-zinc-500">{d}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-2xl border border-black/[0.06] bg-gradient-to-br from-brand-muted to-white p-6">
-            <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-brand">
-              <TrendingUp className="size-3.5" /> This week
-            </div>
-            <p className="mt-2 text-sm text-zinc-700">
-              You're <strong>+18%</strong> ahead of last week. Keep this pace and you'll finish the syllabus 2 weeks early.
-            </p>
-            <Link to="/leaderboard" className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-brand">
-              See leaderboard <ArrowRight className="size-3" />
-            </Link>
-          </div>
-        </aside>
-      </div>
+      {role === "teacher" ? <TeacherView /> : role === "admin" ? <AdminView /> : <StudentView />}
     </div>
   );
 }
 
-function Metric({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+function StatCard({ icon: Icon, label, value, hint }: any) {
   return (
     <div className="rounded-2xl border border-black/[0.06] bg-white p-5">
-      <div className="flex items-center justify-between">
-        {icon}
-        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{label}</span>
+      <div className="flex items-center gap-2 text-xs text-zinc-500"><Icon className="size-4 text-brand" />{label}</div>
+      <div className="font-display mt-2 text-3xl font-semibold">{value}</div>
+      {hint && <div className="mt-1 text-xs text-zinc-400">{hint}</div>}
+    </div>
+  );
+}
+
+function StudentView() {
+  const { user } = useAuth();
+  const [stats, setStats] = useState({ enrolled: 0, completed: 0, xp: 0, streak: 0 });
+  const [enrolls, setEnrolls] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const [prof, en, lp] = await Promise.all([
+        supabase.from("profiles").select("xp,streak").eq("id", user.id).maybeSingle(),
+        supabase.from("course_enrollments").select("id, course:teacher_courses(id,title,subject,grade,cover_emoji)").eq("student_id", user.id),
+        supabase.from("lesson_progress").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      ]);
+      setStats({ enrolled: en.data?.length ?? 0, completed: lp.count ?? 0, xp: prof.data?.xp ?? 0, streak: prof.data?.streak ?? 0 });
+      setEnrolls(en.data ?? []);
+    })();
+  }, [user]);
+
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <StatCard icon={Flame} label="Day streak" value={stats.streak} hint="Keep it alive" />
+        <StatCard icon={Sparkles} label="XP earned" value={stats.xp} hint="Across all activities" />
+        <StatCard icon={BookOpen} label="Courses joined" value={stats.enrolled} />
+        <StatCard icon={Award} label="Lessons done" value={stats.completed} />
       </div>
-      <div className="font-display mt-3 text-3xl font-semibold">{value}</div>
+
+      <section>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="font-display text-2xl font-semibold">Your courses</h2>
+          <Link to="/student/browse" className="text-xs font-medium text-brand">Browse all →</Link>
+        </div>
+        {enrolls.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-black/[0.1] bg-white p-10 text-center">
+            <p className="text-zinc-500">You haven't joined any teacher-led courses yet.</p>
+            <Link to="/student/browse" className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">
+              Browse courses →
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {enrolls.map((e) => e.course && (
+              <Link key={e.id} to="/student/course/$id" params={{ id: e.course.id }}
+                className="block rounded-2xl border border-black/[0.06] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md">
+                <div className="text-3xl">{e.course.cover_emoji}</div>
+                <div className="mt-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400">{e.course.subject} · Class {e.course.grade}</div>
+                <div className="font-display mt-1 text-lg font-semibold">{e.course.title}</div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section>
+        <h2 className="font-display mb-3 text-2xl font-semibold">Keep exploring</h2>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {[
+            { to: "/games", label: "Play games", icon: "🎮" },
+            { to: "/mat", label: "Mental Ability", icon: "🧠" },
+            { to: "/experiments", label: "Virtual Labs", icon: "🧪" },
+            { to: "/vocabulary", label: "Vocabulary", icon: "📖" },
+          ].map((x) => (
+            <Link key={x.to} to={x.to} className="rounded-2xl border border-black/[0.06] bg-white p-4 transition hover:shadow-md">
+              <div className="text-2xl">{x.icon}</div>
+              <div className="mt-2 text-sm font-medium">{x.label}</div>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function TeacherView() {
+  const { user } = useAuth();
+  const [stats, setStats] = useState({ courses: 0, students: 0, published: 0 });
+  const [recent, setRecent] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const courses = await supabase.from("teacher_courses").select("id,title,subject,grade,published,cover_emoji,created_at").eq("teacher_id", user.id).order("created_at", { ascending: false });
+      const courseIds = (courses.data ?? []).map((c) => c.id);
+      const enr = courseIds.length ? await supabase.from("course_enrollments").select("id", { count: "exact", head: true }).in("course_id", courseIds) : { count: 0 };
+      setStats({
+        courses: courses.data?.length ?? 0,
+        published: courses.data?.filter((c) => c.published).length ?? 0,
+        students: enr.count ?? 0,
+      });
+      setRecent(courses.data ?? []);
+    })();
+  }, [user]);
+
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <StatCard icon={BookOpen} label="Courses" value={stats.courses} />
+        <StatCard icon={Sparkles} label="Published" value={stats.published} />
+        <StatCard icon={Users} label="Enrolled students" value={stats.students} />
+        <StatCard icon={TrendingUp} label="Avg. completion" value="68%" hint="across all lessons" />
+      </div>
+
+      <section>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="font-display text-2xl font-semibold">My courses</h2>
+          <Link to="/teacher/courses" className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-xs font-medium text-white">
+            <Plus className="size-3.5" /> New course
+          </Link>
+        </div>
+        {recent.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-black/[0.1] bg-white p-10 text-center">
+            <p className="text-zinc-500">No courses yet. Create your first one.</p>
+            <Link to="/teacher/courses" className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">
+              Create course
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {recent.map((c) => (
+              <Link key={c.id} to="/teacher/course/$id" params={{ id: c.id }}
+                className="block rounded-2xl border border-black/[0.06] bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md">
+                <div className="flex items-start justify-between">
+                  <div className="text-3xl">{c.cover_emoji}</div>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${c.published ? "bg-brand-muted text-brand" : "bg-zinc-100 text-zinc-500"}`}>
+                    {c.published ? "Live" : "Draft"}
+                  </span>
+                </div>
+                <div className="mt-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400">{c.subject} · Class {c.grade}</div>
+                <div className="font-display mt-1 text-lg font-semibold">{c.title}</div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+function AdminView() {
+  const [stats, setStats] = useState({ users: 0, teachers: 0, students: 0, courses: 0 });
+  useEffect(() => {
+    (async () => {
+      const [pr, ro, co] = await Promise.all([
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
+        supabase.from("user_roles").select("role"),
+        supabase.from("teacher_courses").select("id", { count: "exact", head: true }),
+      ]);
+      const roles = ro.data ?? [];
+      setStats({
+        users: pr.count ?? 0,
+        teachers: roles.filter((r) => r.role === "teacher").length,
+        students: roles.filter((r) => r.role === "student").length,
+        courses: co.count ?? 0,
+      });
+    })();
+  }, []);
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <StatCard icon={Users} label="Total users" value={stats.users} />
+        <StatCard icon={GraduationCap} label="Students" value={stats.students} />
+        <StatCard icon={Users} label="Teachers" value={stats.teachers} />
+        <StatCard icon={BookOpen} label="Courses" value={stats.courses} />
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Link to="/admin" className="rounded-2xl border border-black/[0.06] bg-white p-6 transition hover:shadow-md">
+          <ShieldCheck className="size-6 text-brand" />
+          <div className="font-display mt-3 text-xl font-semibold">User & Role Management</div>
+          <p className="mt-1 text-sm text-zinc-500">View all users, promote teachers, manage admins.</p>
+        </Link>
+        <Link to="/leaderboard" className="rounded-2xl border border-black/[0.06] bg-white p-6 transition hover:shadow-md">
+          <TrendingUp className="size-6 text-brand" />
+          <div className="font-display mt-3 text-xl font-semibold">Platform Leaderboard</div>
+          <p className="mt-1 text-sm text-zinc-500">Top performers across all games and courses.</p>
+        </Link>
+      </div>
     </div>
   );
 }
