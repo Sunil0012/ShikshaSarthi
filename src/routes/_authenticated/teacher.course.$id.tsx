@@ -184,7 +184,7 @@ function LessonEditor({ lesson, index, reload, open, onOpen }: any) {
             </div>
             <div className="mt-3 space-y-3">
               {quizzes.map((q, qi) => (
-                <QuizEditor key={q.id} q={q} index={qi} onChange={(patch) => updateQuiz(q, patch)} onDelete={() => deleteQuiz(q.id)} />
+                <QuizEditor key={q.id} q={q} index={qi} onChange={(patch: any) => updateQuiz(q, patch)} onDelete={() => deleteQuiz(q.id)} />
               ))}
             </div>
           </div>
