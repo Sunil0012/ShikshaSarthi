@@ -138,7 +138,7 @@ function LessonEditor({ lesson, index, reload, open, onOpen }: any) {
     setSavingQ(false);
     loadQuizzes();
   }
-  async function updateQuiz(q: any, patch: any) {
+  async function updateQuiz(q: any, patch: Record<string, unknown>) {
     await supabase.from("teacher_quizzes").update(patch).eq("id", q.id);
     loadQuizzes();
   }
