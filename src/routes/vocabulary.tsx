@@ -25,7 +25,7 @@ function VocabPage() {
       </div>
       <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {VOCAB_CHAPTERS.map((v) => (
-          <Link key={v.slug} to="/auth" search={{ mode: "signup" }} className="group block rounded-2xl border border-black/[0.06] bg-white p-6 transition hover:-translate-y-0.5 hover:shadow-md">
+          <Link key={v.slug} to={`/vocabulary/${v.slug}` as any} className="group block rounded-2xl border border-black/[0.06] bg-white p-6 transition hover:-translate-y-0.5 hover:shadow-md">
             <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Class {v.grade}</div>
             <h3 className="font-display mt-2 text-xl font-semibold">{v.title}</h3>
             <div className="mt-4 flex items-center justify-between text-xs text-zinc-500">

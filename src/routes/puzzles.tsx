@@ -15,10 +15,11 @@ export const Route = createFileRoute("/puzzles")({
 
 const ITEMS = [
   { slug: "memory-match", title: "Memory Match", desc: "Flip cards to find concept pairs — Hindi vocab, chem symbols, math constants.", to: "/games/memory-match", icon: Brain, status: "Playable" },
-  { slug: "match-pieces", title: "Match the Pieces", desc: "Drag concept tiles to definitions. Great for revision before exams.", to: "/games/memory-match", icon: PuzzleIcon, status: "Beta" },
-  { slug: "logic-grid", title: "Logic Grid", desc: "Classic logic puzzles — deduce the answer from clue sets.", to: "/games/memory-match", icon: Grid3x3, status: "Coming soon" },
-  { slug: "shape-sort", title: "Shape Sort", desc: "Sort 3D nets and 2D shapes by geometric category.", to: "/games/memory-match", icon: Shapes, status: "Coming soon" },
+  { slug: "quiz-arena", title: "Quiz Arena", desc: "Lives-based quiz battle with streak multipliers across every subject.", to: "/games/quiz-arena", icon: PuzzleIcon, status: "Playable" },
+  { slug: "number-ninja", title: "Number Ninja", desc: "Slice through mental math problems before the timer runs out.", to: "/games/number-ninja", icon: Grid3x3, status: "Playable" },
+  { slug: "fraction-frenzy", title: "Fraction Frenzy", desc: "Convert fractions, decimals and percentages at speed.", to: "/games/fraction-frenzy", icon: Shapes, status: "Playable" },
 ];
+
 
 function PuzzlesPage() {
   return (
