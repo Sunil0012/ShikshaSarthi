@@ -23,7 +23,7 @@ function ExpPage() {
 
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {EXPERIMENTS.map((e) => (
-          <Link key={e.slug} to="/auth" search={{ mode: "signup" }} className="group relative block overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-6 transition hover:shadow-lg">
+          <Link key={e.slug} to={`/experiments/${e.slug}` as any} className="group relative block overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-6 transition hover:shadow-lg">
             <div className="absolute -right-12 -top-12 size-40 rounded-full bg-brand/10 blur-2xl" />
             <div className="relative">
               <div className="text-[10px] font-bold uppercase tracking-widest text-brand">{e.subject} · Class {e.grade}</div>

@@ -131,14 +131,14 @@ export const LEADERBOARD: Array<{ n: string; name: string; grade: number; spec: 
 export const GAMES = [
   { slug: "memory-match", title: "Memory Match", subject: "Cognition", desc: "Flip and match concept cards. Trains visual memory and recall under time.", players: "14.2k", grade: "6-12", tone: "brand" as const, icon: "Brain", playable: true },
   { slug: "quiz-arena", title: "Quiz Arena", subject: "All Subjects", desc: "A timed, lives-based quiz battle with streak bonuses and XP rewards.", players: "21.7k", grade: "6-12", tone: "ember" as const, icon: "Swords", playable: true },
-  { slug: "number-ninja", title: "Number Ninja", subject: "Mathematics", desc: "Slice equations before the timer ends. Trains mental math speed.", players: "12.4k", grade: "6-8", tone: "brand" as const, icon: "Sword" },
-  { slug: "atom-architect", title: "Atom Architect", subject: "Chemistry", desc: "Build molecules atom-by-atom under chemistry rules.", players: "8.1k", grade: "9-12", tone: "ember" as const, icon: "Atom" },
-  { slug: "grammar-galaxy", title: "Grammar Galaxy", subject: "English", desc: "Pilot a spaceship by spotting grammar errors in mission logs.", players: "6.8k", grade: "6-10", tone: "violet" as const, icon: "Rocket" },
-  { slug: "physics-playground", title: "Physics Playground", subject: "Physics", desc: "Solve real-world puzzles using motion, force, and energy.", players: "5.3k", grade: "9-12", tone: "azure" as const, icon: "Magnet" },
-  { slug: "history-detective", title: "History Detective", subject: "Social Studies", desc: "Travel back in time and crack history's biggest mysteries.", players: "4.7k", grade: "6-10", tone: "rose" as const, icon: "Compass" },
-  { slug: "code-quest", title: "Code Quest", subject: "Computer Science", desc: "Defeat bosses by writing Python loops and conditions.", players: "9.2k", grade: "8-12", tone: "brand" as const, icon: "Code2" },
-  { slug: "bio-builder", title: "Bio Builder", subject: "Biology", desc: "Construct cells, organs, and ecosystems brick-by-brick.", players: "3.9k", grade: "9-12", tone: "amber" as const, icon: "Leaf" },
-  { slug: "fraction-frenzy", title: "Fraction Frenzy", subject: "Mathematics", desc: "Match fractions, decimals, and percentages at lightning speed.", players: "7.1k", grade: "6-8", tone: "violet" as const, icon: "PieChart" },
+  { slug: "number-ninja", title: "Number Ninja", subject: "Mathematics", desc: "Slice equations before the timer ends. Trains mental math speed.", players: "12.4k", grade: "6-8", tone: "brand" as const, icon: "Sword", playable: true },
+  { slug: "atom-architect", title: "Atom Architect", subject: "Chemistry", desc: "Build molecules atom-by-atom under chemistry rules.", players: "8.1k", grade: "9-12", tone: "ember" as const, icon: "Atom", playable: true },
+  { slug: "grammar-galaxy", title: "Grammar Galaxy", subject: "English", desc: "Pilot a spaceship by spotting grammar errors in mission logs.", players: "6.8k", grade: "6-10", tone: "violet" as const, icon: "Rocket", playable: true },
+  { slug: "physics-playground", title: "Physics Playground", subject: "Physics", desc: "Solve real-world puzzles using motion, force, and energy.", players: "5.3k", grade: "9-12", tone: "azure" as const, icon: "Magnet", playable: true },
+  { slug: "history-detective", title: "History Detective", subject: "Social Studies", desc: "Travel back in time and crack history's biggest mysteries.", players: "4.7k", grade: "6-10", tone: "rose" as const, icon: "Compass", playable: true },
+  { slug: "code-quest", title: "Code Quest", subject: "Computer Science", desc: "Defeat bosses by writing Python loops and conditions.", players: "9.2k", grade: "8-12", tone: "brand" as const, icon: "Code2", playable: true },
+  { slug: "bio-builder", title: "Bio Builder", subject: "Biology", desc: "Construct cells, organs, and ecosystems brick-by-brick.", players: "3.9k", grade: "9-12", tone: "amber" as const, icon: "Leaf", playable: true },
+  { slug: "fraction-frenzy", title: "Fraction Frenzy", subject: "Mathematics", desc: "Match fractions, decimals, and percentages at lightning speed.", players: "7.1k", grade: "6-8", tone: "violet" as const, icon: "PieChart", playable: true },
 ];
 
 export function getCourse(slug: string) { return COURSES.find((c) => c.slug === slug); }

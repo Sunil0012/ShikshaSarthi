@@ -62,16 +62,6 @@ function Nav() {
         <div className="flex items-center gap-6">
           <Logo />
           <div className="hidden items-center gap-5 md:flex">
-            <DropdownTrigger label="Platform" open={hoverMenu === "for"} onEnter={() => setHoverMenu("for")} onLeave={() => setHoverMenu(null)}>
-              <div className="grid w-[440px] grid-cols-1 gap-1 p-2">
-                {FOR_LINKS.map((l) => (
-                  <Link key={l.to} to={l.to} className="rounded-lg px-3 py-2 hover:bg-zinc-100" onClick={() => setHoverMenu(null)}>
-                    <div className="text-sm font-medium">{l.label}</div>
-                    <div className="text-xs text-zinc-500">{l.desc}</div>
-                  </Link>
-                ))}
-              </div>
-            </DropdownTrigger>
             <DropdownTrigger label="Learn" open={hoverMenu === "learn"} onEnter={() => setHoverMenu("learn")} onLeave={() => setHoverMenu(null)}>
               <div className="grid w-[260px] grid-cols-1 gap-0.5 p-2">
                 {LEARN_LINKS.map((l) => (
@@ -81,6 +71,7 @@ function Nav() {
                 ))}
               </div>
             </DropdownTrigger>
+
             {navLinks.map((l) => {
               const active = pathname === l.to || pathname.startsWith(l.to + "/");
               return (
