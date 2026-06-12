@@ -30,7 +30,7 @@ export const Route = createFileRoute("/experiments/$slug")({
 
 function ExperimentPage() {
   const { exp, detail } = Route.useLoaderData();
-  const initial = useMemo(() => Object.fromEntries(detail.variables.map((v) => [v.name, v.init])), [detail]);
+  const initial = useMemo(() => Object.fromEntries(detail.variables.map((v: any) => [v.name, v.init])), [detail]);
   const [vars, setVars] = useState<Record<string, number>>(initial);
   const [showQuiz, setShowQuiz] = useState(false);
 
@@ -55,7 +55,7 @@ function ExperimentPage() {
         <div className="rounded-3xl border border-black/[0.06] bg-white p-6">
           <h3 className="font-display text-lg font-semibold">Controls</h3>
           <div className="mt-5 space-y-5">
-            {detail.variables.map((v) => (
+            {detail.variables.map((v: any) => (
               <div key={v.name}>
                 <div className="mb-1 flex items-center justify-between text-sm">
                   <label className="font-medium">{v.name} {v.unit && <span className="text-zinc-400">({v.unit})</span>}</label>
@@ -70,7 +70,7 @@ function ExperimentPage() {
         <div className="rounded-3xl border border-black/[0.06] bg-gradient-to-br from-brand-muted via-white to-white p-6">
           <h3 className="font-display text-lg font-semibold">Live observation</h3>
           <div className="mt-5 space-y-3">
-            {results.map((r) => (
+            {results.map((r: any) => (
               <div key={r.label} className="rounded-xl bg-white p-4 ring-1 ring-black/[0.04]">
                 <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{r.label}</div>
                 <div className="font-display mt-1 text-2xl font-semibold">{r.value}</div>
