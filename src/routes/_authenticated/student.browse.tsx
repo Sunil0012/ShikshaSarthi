@@ -44,11 +44,24 @@ function Page() {
     (q === "" || c.title.toLowerCase().includes(q.toLowerCase()) || c.subject.toLowerCase().includes(q.toLowerCase()))
   );
 
+  async function joinByCode(code: string) {
+    if (!user || !code.trim()) return;
+    const { data: course, error } = await (supabase as any)
+      .from("teacher_courses").select("id, title").eq("join_code", code.trim().toUpperCase()).maybeSingle();
+    if (error || !course) return toast.error("Invalid join code");
+    const { error: e2 } = await supabase.from("course_enrollments").insert({ course_id: course.id, student_id: user.id });
+    if (e2 && !e2.message.includes("duplicate")) return toast.error(e2.message);
+    toast.success(`Joined ${course.title}!`);
+    load();
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
       <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Student</div>
       <h1 className="font-display mt-1 text-4xl font-semibold tracking-tight">Browse teacher-led courses</h1>
       <p className="mt-2 text-zinc-500">Discover courses created by Shiksha Saarthi teachers and join the ones you love.</p>
+
+      <JoinByCode onJoin={joinByCode} />
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
