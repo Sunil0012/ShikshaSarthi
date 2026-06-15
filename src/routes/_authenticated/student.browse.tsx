@@ -113,3 +113,20 @@ function Page() {
     </div>
   );
 }
+
+function JoinByCode({ onJoin }: { onJoin: (code: string) => void }) {
+  const [code, setCode] = useState("");
+  return (
+    <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-brand/20 bg-brand-muted/30 p-4">
+      <div>
+        <div className="text-xs font-semibold uppercase tracking-widest text-brand">Got a class join code?</div>
+        <div className="text-xs text-zinc-500">Paste the 6-character code from your teacher to join their class instantly.</div>
+      </div>
+      <div className="ml-auto flex items-center gap-2">
+        <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="ABC123" maxLength={6}
+          className="w-32 rounded-full border border-black/[0.1] bg-white px-3 py-1.5 text-center font-mono text-sm font-semibold tracking-widest outline-none" />
+        <button onClick={() => { onJoin(code); setCode(""); }} className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium text-white">Join</button>
+      </div>
+    </div>
+  );
+}
