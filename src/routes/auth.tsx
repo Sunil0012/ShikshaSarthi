@@ -34,17 +34,37 @@ function AuthPage() {
 
   useEffect(() => { if (user) navigate({ to: "/dashboard" }); }, [user, navigate]);
 
+  const [teacherSubjects, setTeacherSubjects] = useState<{ subject: string; grade: number }[]>([]);
+  function toggleTS(subject: string, grade: number) {
+    setTeacherSubjects((prev) => {
+      const i = prev.findIndex((x) => x.subject === subject && x.grade === grade);
+      if (i >= 0) return prev.filter((_, j) => j !== i);
+      return [...prev, { subject, grade }];
+    });
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        if (role === "teacher" && teacherSubjects.length === 0) {
+          throw new Error("Pick at least one subject + class you teach.");
+        }
+        const { data, error } = await supabase.auth.signUp({
           email, password,
           options: { emailRedirectTo: window.location.origin, data: { full_name: name, grade, role } },
         });
         if (error) throw error;
-        toast.success("Account created — check your email to verify.");
+        if (role === "teacher" && data.user && teacherSubjects.length) {
+          // Sign in immediately so RLS lets us insert
+          await supabase.auth.signInWithPassword({ email, password });
+          await (supabase as any).from("teacher_subjects").insert(
+            teacherSubjects.map((s) => ({ teacher_id: data.user!.id, subject: s.subject, grade: s.grade }))
+          );
+        }
+        toast.success("Welcome to Shiksha Saarthi!");
+        navigate({ to: "/dashboard" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
