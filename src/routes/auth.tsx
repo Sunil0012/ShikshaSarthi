@@ -179,3 +179,40 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </label>
   );
 }
+
+const TEACH_SUBJECTS = ["Mathematics", "Science", "Physics", "Chemistry", "Biology", "English", "Hindi", "Social Studies", "Computer Science"];
+
+function TeacherSubjectPicker({ selected, toggle }: { selected: { subject: string; grade: number }[]; toggle: (s: string, g: number) => void }) {
+  const [subject, setSubject] = useState(TEACH_SUBJECTS[0]);
+  const isPicked = (s: string, g: number) => selected.some((x) => x.subject === s && x.grade === g);
+  return (
+    <div>
+      <span className="mb-1.5 block text-xs font-medium text-zinc-600">Subjects & classes you teach</span>
+      <select value={subject} onChange={(e) => setSubject(e.target.value)} className="input mb-2">
+        {TEACH_SUBJECTS.map((s) => <option key={s}>{s}</option>)}
+      </select>
+      <div className="flex flex-wrap gap-1.5">
+        {[6, 7, 8, 9, 10, 11, 12].map((g) => {
+          const on = isPicked(subject, g);
+          return (
+            <button type="button" key={g} onClick={() => toggle(subject, g)}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition ${on ? "bg-brand text-white" : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"}`}>
+              Class {g}
+            </button>
+          );
+        })}
+      </div>
+      {selected.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {selected.map((s, i) => (
+            <span key={i} className="inline-flex items-center gap-1 rounded-full bg-brand-muted px-2 py-0.5 text-[10px] font-medium text-brand">
+              {s.subject} · {s.grade}
+              <button type="button" onClick={() => toggle(s.subject, s.grade)} className="ml-0.5">×</button>
+            </span>
+          ))}
+        </div>
+      )}
+      <p className="mt-1.5 text-[11px] text-zinc-400">Pick at least one. You can edit later.</p>
+    </div>
+  );
+}
