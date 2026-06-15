@@ -121,6 +121,11 @@ function Page() {
                 <div className="mt-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400">{c.subject} · Class {c.grade}</div>
                 <div className="font-display mt-1 text-lg font-semibold">{c.title}</div>
                 {c.description && <p className="mt-2 line-clamp-2 text-sm text-zinc-500">{c.description}</p>}
+                {c.join_code && (
+                  <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-zinc-50 px-3 py-1 font-mono text-xs font-semibold text-ink ring-1 ring-black/[0.05]">
+                    Join code: <span className="text-brand">{c.join_code}</span>
+                  </div>
+                )}
               </Link>
             ))}
           </div>

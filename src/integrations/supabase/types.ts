@@ -112,6 +112,75 @@ export type Database = {
         }
         Relationships: []
       }
+      practice_attempts: {
+        Row: {
+          created_at: string
+          grade: number
+          id: string
+          score: number
+          student_id: string
+          subject: string
+          total: number
+        }
+        Insert: {
+          created_at?: string
+          grade: number
+          id?: string
+          score: number
+          student_id: string
+          subject: string
+          total: number
+        }
+        Update: {
+          created_at?: string
+          grade?: number
+          id?: string
+          score?: number
+          student_id?: string
+          subject?: string
+          total?: number
+        }
+        Relationships: []
+      }
+      practice_questions: {
+        Row: {
+          correct_index: number
+          created_at: string
+          difficulty: string
+          explanation: string | null
+          grade: number
+          id: string
+          options: Json
+          question: string
+          subject: string
+          topic: string | null
+        }
+        Insert: {
+          correct_index: number
+          created_at?: string
+          difficulty?: string
+          explanation?: string | null
+          grade: number
+          id?: string
+          options: Json
+          question: string
+          subject: string
+          topic?: string | null
+        }
+        Update: {
+          correct_index?: number
+          created_at?: string
+          difficulty?: string
+          explanation?: string | null
+          grade?: number
+          id?: string
+          options?: Json
+          question?: string
+          subject?: string
+          topic?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -193,6 +262,7 @@ export type Database = {
           description: string | null
           grade: number
           id: string
+          join_code: string | null
           published: boolean
           subject: string
           teacher_id: string
@@ -205,6 +275,7 @@ export type Database = {
           description?: string | null
           grade: number
           id?: string
+          join_code?: string | null
           published?: boolean
           subject: string
           teacher_id: string
@@ -217,6 +288,7 @@ export type Database = {
           description?: string | null
           grade?: number
           id?: string
+          join_code?: string | null
           published?: boolean
           subject?: string
           teacher_id?: string
@@ -232,6 +304,7 @@ export type Database = {
           created_at: string
           duration_min: number | null
           id: string
+          module_id: string | null
           position: number
           title: string
           video_url: string | null
@@ -242,6 +315,7 @@ export type Database = {
           created_at?: string
           duration_min?: number | null
           id?: string
+          module_id?: string | null
           position?: number
           title: string
           video_url?: string | null
@@ -252,6 +326,7 @@ export type Database = {
           created_at?: string
           duration_min?: number | null
           id?: string
+          module_id?: string | null
           position?: number
           title?: string
           video_url?: string | null
@@ -259,6 +334,48 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "teacher_lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "teacher_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teacher_modules: {
+        Row: {
+          course_id: string
+          created_at: string
+          description: string | null
+          id: string
+          position: number
+          title: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          position?: number
+          title: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          position?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_modules_course_id_fkey"
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "teacher_courses"
@@ -304,6 +421,30 @@ export type Database = {
           },
         ]
       }
+      teacher_subjects: {
+        Row: {
+          created_at: string
+          grade: number
+          id: string
+          subject: string
+          teacher_id: string
+        }
+        Insert: {
+          created_at?: string
+          grade: number
+          id?: string
+          subject: string
+          teacher_id: string
+        }
+        Update: {
+          created_at?: string
+          grade?: number
+          id?: string
+          subject?: string
+          teacher_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -330,6 +471,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_join_code: { Args: never; Returns: string }
       get_my_role: {
         Args: never
         Returns: Database["public"]["Enums"]["app_role"]

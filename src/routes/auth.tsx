@@ -34,17 +34,37 @@ function AuthPage() {
 
   useEffect(() => { if (user) navigate({ to: "/dashboard" }); }, [user, navigate]);
 
+  const [teacherSubjects, setTeacherSubjects] = useState<{ subject: string; grade: number }[]>([]);
+  function toggleTS(subject: string, grade: number) {
+    setTeacherSubjects((prev) => {
+      const i = prev.findIndex((x) => x.subject === subject && x.grade === grade);
+      if (i >= 0) return prev.filter((_, j) => j !== i);
+      return [...prev, { subject, grade }];
+    });
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        if (role === "teacher" && teacherSubjects.length === 0) {
+          throw new Error("Pick at least one subject + class you teach.");
+        }
+        const { data, error } = await supabase.auth.signUp({
           email, password,
           options: { emailRedirectTo: window.location.origin, data: { full_name: name, grade, role } },
         });
         if (error) throw error;
-        toast.success("Account created — check your email to verify.");
+        if (role === "teacher" && data.user && teacherSubjects.length) {
+          // Sign in immediately so RLS lets us insert
+          await supabase.auth.signInWithPassword({ email, password });
+          await (supabase as any).from("teacher_subjects").insert(
+            teacherSubjects.map((s) => ({ teacher_id: data.user!.id, subject: s.subject, grade: s.grade }))
+          );
+        }
+        toast.success("Welcome to Shiksha Saarthi!");
+        navigate({ to: "/dashboard" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -124,6 +144,7 @@ function AuthPage() {
                   </select>
                 </Field>
               )}
+              {role === "teacher" && <TeacherSubjectPicker selected={teacherSubjects} toggle={toggleTS} />}
             </>
           )}
           <Field label="Email">
@@ -156,5 +177,42 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="mb-1.5 block text-xs font-medium text-zinc-600">{label}</span>
       {children}
     </label>
+  );
+}
+
+const TEACH_SUBJECTS = ["Mathematics", "Science", "Physics", "Chemistry", "Biology", "English", "Hindi", "Social Studies", "Computer Science"];
+
+function TeacherSubjectPicker({ selected, toggle }: { selected: { subject: string; grade: number }[]; toggle: (s: string, g: number) => void }) {
+  const [subject, setSubject] = useState(TEACH_SUBJECTS[0]);
+  const isPicked = (s: string, g: number) => selected.some((x) => x.subject === s && x.grade === g);
+  return (
+    <div>
+      <span className="mb-1.5 block text-xs font-medium text-zinc-600">Subjects & classes you teach</span>
+      <select value={subject} onChange={(e) => setSubject(e.target.value)} className="input mb-2">
+        {TEACH_SUBJECTS.map((s) => <option key={s}>{s}</option>)}
+      </select>
+      <div className="flex flex-wrap gap-1.5">
+        {[6, 7, 8, 9, 10, 11, 12].map((g) => {
+          const on = isPicked(subject, g);
+          return (
+            <button type="button" key={g} onClick={() => toggle(subject, g)}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition ${on ? "bg-brand text-white" : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"}`}>
+              Class {g}
+            </button>
+          );
+        })}
+      </div>
+      {selected.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {selected.map((s, i) => (
+            <span key={i} className="inline-flex items-center gap-1 rounded-full bg-brand-muted px-2 py-0.5 text-[10px] font-medium text-brand">
+              {s.subject} · {s.grade}
+              <button type="button" onClick={() => toggle(s.subject, s.grade)} className="ml-0.5">×</button>
+            </span>
+          ))}
+        </div>
+      )}
+      <p className="mt-1.5 text-[11px] text-zinc-400">Pick at least one. You can edit later.</p>
+    </div>
   );
 }

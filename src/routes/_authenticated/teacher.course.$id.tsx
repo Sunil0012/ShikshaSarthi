@@ -17,7 +17,7 @@ function Page() {
   const [course, setCourse] = useState<any>(null);
   const [lessons, setLessons] = useState<any[]>([]);
   const [enrollments, setEnrollments] = useState<number>(0);
-  const [tab, setTab] = useState<"lessons" | "students" | "settings">("lessons");
+  const [tab, setTab] = useState<"lessons" | "modules" | "students" | "settings">("lessons");
   const [busy, setBusy] = useState(false);
 
   async function load() {
@@ -77,8 +77,18 @@ function Page() {
         </button>
       </div>
 
+      {course.join_code && (
+        <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-brand/20 bg-brand-muted/40 p-4">
+          <div className="text-xs font-semibold uppercase tracking-widest text-brand">Class join code</div>
+          <div className="font-mono text-2xl font-bold tracking-widest text-ink">{course.join_code}</div>
+          <button onClick={() => { navigator.clipboard.writeText(course.join_code); toast.success("Copied!"); }}
+            className="rounded-full bg-white px-3 py-1 text-xs font-medium text-ink ring-1 ring-black/[0.06]">Copy</button>
+          <span className="text-xs text-zinc-500">Share with students — they paste this on their dashboard to join.</span>
+        </div>
+      )}
+
       <div className="mt-8 flex gap-1 rounded-full bg-zinc-100 p-1 text-sm">
-        {(["lessons", "students", "settings"] as const).map((t) => (
+        {(["lessons", "modules", "students", "settings"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className={`flex-1 rounded-full px-4 py-1.5 font-medium capitalize transition ${tab === t ? "bg-white text-ink shadow-sm" : "text-zinc-500"}`}>
             {t} {t === "students" && `(${enrollments})`} {t === "lessons" && `(${lessons.length})`}
@@ -88,8 +98,54 @@ function Page() {
 
       <div className="mt-6">
         {tab === "lessons" && <LessonsTab lessons={lessons} reload={load} addLesson={addLesson} courseId={id} />}
+        {tab === "modules" && <ModulesTab courseId={id} />}
         {tab === "students" && <StudentsTab courseId={id} />}
         {tab === "settings" && <SettingsTab course={course} reload={load} onDelete={deleteCourse} />}
+      </div>
+    </div>
+  );
+}
+
+function ModulesTab({ courseId }: { courseId: string }) {
+  const [mods, setMods] = useState<any[]>([]);
+  const [title, setTitle] = useState("");
+  async function load() {
+    const { data } = await (supabase as any).from("teacher_modules").select("*").eq("course_id", courseId).order("position");
+    setMods(data ?? []);
+  }
+  useEffect(() => { load(); }, [courseId]);
+  async function add() {
+    if (!title.trim()) return;
+    await (supabase as any).from("teacher_modules").insert({ course_id: courseId, title, position: mods.length });
+    setTitle(""); load();
+  }
+  async function rename(id: string, t: string) {
+    await (supabase as any).from("teacher_modules").update({ title: t }).eq("id", id);
+    load();
+  }
+  async function del(id: string) {
+    if (!confirm("Delete this module? Lessons will stay but be unassigned.")) return;
+    await (supabase as any).from("teacher_modules").delete().eq("id", id);
+    load();
+  }
+  return (
+    <div>
+      <p className="mb-3 text-sm text-zinc-500">Modules group your lessons into chapters (e.g. "Unit 1 — Algebra basics").</p>
+      <div className="space-y-2">
+        {mods.map((m, i) => (
+          <div key={m.id} className="flex items-center gap-2 rounded-xl border border-black/[0.06] bg-white p-3">
+            <span className="grid size-7 place-items-center rounded-full bg-brand-muted text-xs font-semibold text-brand">{i + 1}</span>
+            <input defaultValue={m.title} onBlur={(e) => e.target.value !== m.title && rename(m.id, e.target.value)}
+              className="flex-1 bg-transparent text-sm font-medium outline-none" />
+            <button onClick={() => del(m.id)} className="grid size-7 place-items-center rounded-md text-zinc-400 hover:bg-rose-50 hover:text-rose-600"><Trash2 className="size-3.5" /></button>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex gap-2">
+        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="New module title" className="flex-1 rounded-lg border border-black/[0.08] bg-white px-3 py-2 text-sm outline-none" />
+        <button onClick={add} className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">
+          <Plus className="size-4" /> Add module
+        </button>
       </div>
     </div>
   );

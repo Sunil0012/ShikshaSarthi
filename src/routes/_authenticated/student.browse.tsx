@@ -44,11 +44,24 @@ function Page() {
     (q === "" || c.title.toLowerCase().includes(q.toLowerCase()) || c.subject.toLowerCase().includes(q.toLowerCase()))
   );
 
+  async function joinByCode(code: string) {
+    if (!user || !code.trim()) return;
+    const { data: course, error } = await (supabase as any)
+      .from("teacher_courses").select("id, title").eq("join_code", code.trim().toUpperCase()).maybeSingle();
+    if (error || !course) return toast.error("Invalid join code");
+    const { error: e2 } = await supabase.from("course_enrollments").insert({ course_id: course.id, student_id: user.id });
+    if (e2 && !e2.message.includes("duplicate")) return toast.error(e2.message);
+    toast.success(`Joined ${course.title}!`);
+    load();
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
       <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Student</div>
       <h1 className="font-display mt-1 text-4xl font-semibold tracking-tight">Browse teacher-led courses</h1>
       <p className="mt-2 text-zinc-500">Discover courses created by Shiksha Saarthi teachers and join the ones you love.</p>
+
+      <JoinByCode onJoin={joinByCode} />
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
@@ -96,6 +109,23 @@ function Page() {
             })}
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function JoinByCode({ onJoin }: { onJoin: (code: string) => void }) {
+  const [code, setCode] = useState("");
+  return (
+    <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-brand/20 bg-brand-muted/30 p-4">
+      <div>
+        <div className="text-xs font-semibold uppercase tracking-widest text-brand">Got a class join code?</div>
+        <div className="text-xs text-zinc-500">Paste the 6-character code from your teacher to join their class instantly.</div>
+      </div>
+      <div className="ml-auto flex items-center gap-2">
+        <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="ABC123" maxLength={6}
+          className="w-32 rounded-full border border-black/[0.1] bg-white px-3 py-1.5 text-center font-mono text-sm font-semibold tracking-widest outline-none" />
+        <button onClick={() => { onJoin(code); setCode(""); }} className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium text-white">Join</button>
       </div>
     </div>
   );

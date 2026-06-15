@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as PuzzlesRouteImport } from './routes/puzzles'
+import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as MatRouteImport } from './routes/mat'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as GamesRouteImport } from './routes/games'
@@ -24,6 +25,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VocabularySlugRouteImport } from './routes/vocabulary.$slug'
+import { Route as PracticeSubjectRouteImport } from './routes/practice.$subject'
 import { Route as MatSlugRouteImport } from './routes/mat.$slug'
 import { Route as GamesQuizArenaRouteImport } from './routes/games.quiz-arena'
 import { Route as GamesPhysicsPlaygroundRouteImport } from './routes/games.physics-playground'
@@ -52,6 +54,11 @@ const VocabularyRoute = VocabularyRouteImport.update({
 const PuzzlesRoute = PuzzlesRouteImport.update({
   id: '/puzzles',
   path: '/puzzles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PracticeRoute = PracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MatRoute = MatRouteImport.update({
@@ -117,6 +124,11 @@ const VocabularySlugRoute = VocabularySlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => VocabularyRoute,
+} as any)
+const PracticeSubjectRoute = PracticeSubjectRouteImport.update({
+  id: '/$subject',
+  path: '/$subject',
+  getParentRoute: () => PracticeRoute,
 } as any)
 const MatSlugRoute = MatSlugRouteImport.update({
   id: '/$slug',
@@ -230,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRouteWithChildren
+  '/practice': typeof PracticeRouteWithChildren
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
@@ -247,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/games/physics-playground': typeof GamesPhysicsPlaygroundRoute
   '/games/quiz-arena': typeof GamesQuizArenaRoute
   '/mat/$slug': typeof MatSlugRoute
+  '/practice/$subject': typeof PracticeSubjectRoute
   '/vocabulary/$slug': typeof VocabularySlugRoute
   '/student/browse': typeof AuthenticatedStudentBrowseRoute
   '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
@@ -265,6 +279,7 @@ export interface FileRoutesByTo {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRouteWithChildren
+  '/practice': typeof PracticeRouteWithChildren
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
@@ -282,6 +297,7 @@ export interface FileRoutesByTo {
   '/games/physics-playground': typeof GamesPhysicsPlaygroundRoute
   '/games/quiz-arena': typeof GamesQuizArenaRoute
   '/mat/$slug': typeof MatSlugRoute
+  '/practice/$subject': typeof PracticeSubjectRoute
   '/vocabulary/$slug': typeof VocabularySlugRoute
   '/student/browse': typeof AuthenticatedStudentBrowseRoute
   '/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
@@ -302,6 +318,7 @@ export interface FileRoutesById {
   '/games': typeof GamesRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/mat': typeof MatRouteWithChildren
+  '/practice': typeof PracticeRouteWithChildren
   '/puzzles': typeof PuzzlesRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -319,6 +336,7 @@ export interface FileRoutesById {
   '/games/physics-playground': typeof GamesPhysicsPlaygroundRoute
   '/games/quiz-arena': typeof GamesQuizArenaRoute
   '/mat/$slug': typeof MatSlugRoute
+  '/practice/$subject': typeof PracticeSubjectRoute
   '/vocabulary/$slug': typeof VocabularySlugRoute
   '/_authenticated/student/browse': typeof AuthenticatedStudentBrowseRoute
   '/_authenticated/teacher/courses': typeof AuthenticatedTeacherCoursesRoute
@@ -339,6 +357,7 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
+    | '/practice'
     | '/puzzles'
     | '/vocabulary'
     | '/admin'
@@ -356,6 +375,7 @@ export interface FileRouteTypes {
     | '/games/physics-playground'
     | '/games/quiz-arena'
     | '/mat/$slug'
+    | '/practice/$subject'
     | '/vocabulary/$slug'
     | '/student/browse'
     | '/teacher/courses'
@@ -374,6 +394,7 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
+    | '/practice'
     | '/puzzles'
     | '/vocabulary'
     | '/admin'
@@ -391,6 +412,7 @@ export interface FileRouteTypes {
     | '/games/physics-playground'
     | '/games/quiz-arena'
     | '/mat/$slug'
+    | '/practice/$subject'
     | '/vocabulary/$slug'
     | '/student/browse'
     | '/teacher/courses'
@@ -410,6 +432,7 @@ export interface FileRouteTypes {
     | '/games'
     | '/leaderboard'
     | '/mat'
+    | '/practice'
     | '/puzzles'
     | '/vocabulary'
     | '/_authenticated/admin'
@@ -427,6 +450,7 @@ export interface FileRouteTypes {
     | '/games/physics-playground'
     | '/games/quiz-arena'
     | '/mat/$slug'
+    | '/practice/$subject'
     | '/vocabulary/$slug'
     | '/_authenticated/student/browse'
     | '/_authenticated/teacher/courses'
@@ -447,6 +471,7 @@ export interface RootRouteChildren {
   GamesRoute: typeof GamesRouteWithChildren
   LeaderboardRoute: typeof LeaderboardRoute
   MatRoute: typeof MatRouteWithChildren
+  PracticeRoute: typeof PracticeRouteWithChildren
   PuzzlesRoute: typeof PuzzlesRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
 }
@@ -465,6 +490,13 @@ declare module '@tanstack/react-router' {
       path: '/puzzles'
       fullPath: '/puzzles'
       preLoaderRoute: typeof PuzzlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/practice': {
+      id: '/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof PracticeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mat': {
@@ -557,6 +589,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/vocabulary/$slug'
       preLoaderRoute: typeof VocabularySlugRouteImport
       parentRoute: typeof VocabularyRoute
+    }
+    '/practice/$subject': {
+      id: '/practice/$subject'
+      path: '/$subject'
+      fullPath: '/practice/$subject'
+      preLoaderRoute: typeof PracticeSubjectRouteImport
+      parentRoute: typeof PracticeRoute
     }
     '/mat/$slug': {
       id: '/mat/$slug'
@@ -776,6 +815,18 @@ const MatRouteChildren: MatRouteChildren = {
 
 const MatRouteWithChildren = MatRoute._addFileChildren(MatRouteChildren)
 
+interface PracticeRouteChildren {
+  PracticeSubjectRoute: typeof PracticeSubjectRoute
+}
+
+const PracticeRouteChildren: PracticeRouteChildren = {
+  PracticeSubjectRoute: PracticeSubjectRoute,
+}
+
+const PracticeRouteWithChildren = PracticeRoute._addFileChildren(
+  PracticeRouteChildren,
+)
+
 interface VocabularyRouteChildren {
   VocabularySlugRoute: typeof VocabularySlugRoute
 }
@@ -801,19 +852,10 @@ const rootRouteChildren: RootRouteChildren = {
   GamesRoute: GamesRouteWithChildren,
   LeaderboardRoute: LeaderboardRoute,
   MatRoute: MatRouteWithChildren,
+  PracticeRoute: PracticeRouteWithChildren,
   PuzzlesRoute: PuzzlesRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

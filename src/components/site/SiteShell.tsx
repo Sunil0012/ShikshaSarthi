@@ -51,6 +51,7 @@ function Nav() {
 
   const navLinks: { to: string; label: string }[] = [
     { to: "/courses", label: "Courses" },
+    { to: "/practice", label: "Practice" },
     { to: "/games", label: "Games" },
   ];
   if (role === "teacher" || role === "admin") navLinks.push({ to: "/leaderboard", label: "Leaderboard" });
