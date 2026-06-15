@@ -17,7 +17,7 @@ function Page() {
   const [course, setCourse] = useState<any>(null);
   const [lessons, setLessons] = useState<any[]>([]);
   const [enrollments, setEnrollments] = useState<number>(0);
-  const [tab, setTab] = useState<"lessons" | "students" | "settings">("lessons");
+  const [tab, setTab] = useState<"lessons" | "modules" | "students" | "settings">("lessons");
   const [busy, setBusy] = useState(false);
 
   async function load() {
