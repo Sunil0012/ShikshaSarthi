@@ -144,6 +144,7 @@ function AuthPage() {
                   </select>
                 </Field>
               )}
+              {role === "teacher" && <TeacherSubjectPicker selected={teacherSubjects} toggle={toggleTS} />}
             </>
           )}
           <Field label="Email">
