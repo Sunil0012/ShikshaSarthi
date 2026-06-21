@@ -7,7 +7,7 @@
     "dev": "vite dev --configLoader native",
     "build": "vite build --configLoader native",
     "build:dev": "vite build --mode development --configLoader native",
-    "preview": "vite preview",
+    "preview": "node .output/server/index.mjs",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
